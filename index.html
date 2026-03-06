@@ -6,41 +6,19 @@
 <title>Call The Grid — F1 Pick'em · callthegrid.com</title>
 <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,400;0,600;0,700;0,900;1,600&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ============================================================
-   DESIGN SYSTEM — Team-colour dynamic theming
-   ============================================================ */
 :root {
-  --team-h: 4;          /* hue for red bull default */
-  --team-s: 90%;
-  --team-l: 48%;
+  --team-h: 4; --team-s: 90%; --team-l: 48%;
   --accent: hsl(var(--team-h), var(--team-s), var(--team-l));
   --accent-dim: hsl(var(--team-h), var(--team-s), 32%);
   --accent-glow: hsl(var(--team-h), var(--team-s), var(--team-l), 0.18);
   --accent-line: hsl(var(--team-h), var(--team-s), var(--team-l), 0.35);
-
-  --bg:    #08080b;
-  --bg2:   #0f0f14;
-  --bg3:   #16161e;
-  --bg4:   #1e1e28;
-  --bg5:   #252532;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
-  --text:   #eeeef4;
-  --text2:  #9999b0;
-  --text3:  #5a5a72;
-
-  --gold:   #f5c518;
-  --silver: #b0b8c8;
-  --bronze: #cd8b3a;
-  --green:  #00d060;
-  --red-flag: #ff2d2d;
-
-  --r: 6px;
-  --r2: 10px;
-  --shadow: 0 4px 24px rgba(0,0,0,0.5);
+  --bg:#08080b; --bg2:#0f0f14; --bg3:#16161e; --bg4:#1e1e28; --bg5:#252532;
+  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.12);
+  --text:#eeeef4; --text2:#9999b0; --text3:#5a5a72;
+  --gold:#f5c518; --silver:#b0b8c8; --bronze:#cd8b3a;
+  --green:#00d060; --red-flag:#ff2d2d;
+  --r:6px; --r2:10px; --shadow:0 4px 24px rgba(0,0,0,0.5);
 }
-
-/* TEAM THEMES */
 body[data-team="red-bull"]     { --team-h:220; --team-s:90%; --team-l:52%; }
 body[data-team="ferrari"]      { --team-h:4;   --team-s:92%; --team-l:48%; }
 body[data-team="mclaren"]      { --team-h:30;  --team-s:95%; --team-l:52%; }
@@ -50,663 +28,240 @@ body[data-team="alpine"]       { --team-h:210; --team-s:85%; --team-l:55%; }
 body[data-team="williams"]     { --team-h:210; --team-s:70%; --team-l:58%; }
 body[data-team="rb"]           { --team-h:220; --team-s:75%; --team-l:55%; }
 body[data-team="haas"]         { --team-h:0;   --team-s:80%; --team-l:50%; }
-body[data-team="sauber"]       { --team-h:130; --team-s:70%; --team-l:42%; }
-
+body[data-team="audi"]         { --team-h:130; --team-s:70%; --team-l:42%; }
+body[data-team="cadillac"]     { --team-h:45;  --team-s:80%; --team-l:50%; }
 *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Titillium Web',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; }
+body::before { content:''; position:fixed; inset:0; z-index:0; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"); opacity:0.4; }
 
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: 'Titillium Web', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* Subtle noise grain overlay */
-body::before {
-  content:'';
-  position:fixed; inset:0; z-index:0; pointer-events:none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  opacity: 0.4;
-}
-
-/* ============================================================ NAV */
-nav {
-  position:sticky; top:0; z-index:200;
-  height:52px;
-  display:flex; align-items:center; justify-content:space-between;
-  padding: 0 16px;
-  background: rgba(8,8,11,0.92);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-}
-.nav-brand {
-  display:flex; align-items:center; gap:8px;
-  font-weight:900; font-size:15px; letter-spacing:2px;
-  text-transform:uppercase; cursor:pointer;
-  white-space:nowrap;
-}
-.nav-brand .box { color: var(--accent); }
-.nav-brand .two { color: var(--text); }
-.nav-brand .dot {
-  width:6px; height:6px; border-radius:50%;
-  background: var(--accent);
-  animation: pulse 2s ease-in-out infinite;
-}
+nav { position:sticky; top:0; z-index:200; height:52px; display:flex; align-items:center; justify-content:space-between; padding:0 16px; background:rgba(8,8,11,0.92); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); }
+.nav-brand { display:flex; align-items:center; gap:8px; font-weight:900; font-size:15px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; white-space:nowrap; }
+.nav-brand .box { color:var(--accent); }
+.nav-brand .dot { width:6px; height:6px; border-radius:50%; background:var(--accent); animation:pulse 2s ease-in-out infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
 .nav-links { display:flex; gap:2px; }
-.nav-link {
-  padding: 6px 12px;
-  font-size:13px; font-weight:700; letter-spacing:1px;
-  text-transform:uppercase; color:var(--text2);
-  background:none; border:none; cursor:pointer; border-radius:var(--r);
-  transition: all .2s;
-}
+.nav-link { padding:6px 12px; font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text2); background:none; border:none; cursor:pointer; border-radius:var(--r); transition:all .2s; }
 .nav-link:hover { color:var(--text); background:var(--bg4); }
 .nav-link.active { color:var(--accent); background:var(--accent-glow); }
 .nav-right { display:flex; align-items:center; gap:10px; }
 .nav-user-name { font-size:13px; font-weight:600; color:var(--text2); }
-.btn-signin {
-  padding: 6px 16px;
-  background: var(--accent); color:#fff;
-  font-family:'Titillium Web',sans-serif;
-  font-weight:700; font-size:13px; letter-spacing:1px;
-  text-transform:uppercase; border:none; border-radius:var(--r);
-  cursor:pointer; transition:.2s;
-}
+.btn-signin { padding:6px 16px; background:var(--accent); color:#fff; font-family:'Titillium Web',sans-serif; font-weight:700; font-size:13px; letter-spacing:1px; text-transform:uppercase; border:none; border-radius:var(--r); cursor:pointer; transition:.2s; }
 .btn-signin:hover { opacity:.85; }
 
-/* ============================================================ PAGES */
-.page { display:none; animation: fadeIn .25s ease; }
+.page { display:none; animation:fadeIn .25s ease; }
 .page.active { display:block; }
 @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
 
-/* ============================================================ HERO / RACE BANNER */
-.race-banner {
-  position:relative; overflow:hidden;
-  padding: 36px 20px 28px;
-  background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
-  border-bottom: 1px solid var(--border);
-}
-.race-banner::after {
-  content:'';
-  position:absolute; top:0; left:0; right:0; height:3px;
-  background: linear-gradient(90deg, var(--accent), transparent);
-}
-.race-banner-inner {
-  max-width:900px; margin:0 auto;
-  display:grid; grid-template-columns:1fr auto; gap:20px; align-items:start;
-}
-.race-eyebrow {
-  font-size:11px; font-weight:700; letter-spacing:3px;
-  color:var(--accent); text-transform:uppercase; margin-bottom:8px;
-}
-.race-title {
-  font-size:clamp(28px,6vw,52px); font-weight:900;
-  text-transform:uppercase; line-height:.95; letter-spacing:-0.5px;
-}
+.race-banner { position:relative; overflow:hidden; padding:36px 20px 28px; background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%); border-bottom:1px solid var(--border); }
+.race-banner::after { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--accent),transparent); }
+.race-banner-inner { max-width:900px; margin:0 auto; display:grid; grid-template-columns:1fr auto; gap:20px; align-items:start; }
+.race-eyebrow { font-size:11px; font-weight:700; letter-spacing:3px; color:var(--accent); text-transform:uppercase; margin-bottom:8px; }
+.race-title { font-size:clamp(28px,6vw,52px); font-weight:900; text-transform:uppercase; line-height:.95; letter-spacing:-0.5px; }
 .race-subtitle { font-size:14px; color:var(--text2); margin-top:6px; font-weight:400; }
 .race-info-chips { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
-.chip {
-  display:inline-flex; align-items:center; gap:5px;
-  padding:4px 10px;
-  background:var(--bg4); border:1px solid var(--border);
-  border-radius:20px; font-size:12px; font-weight:600; color:var(--text2);
-}
-.chip .icon { font-size:11px; }
+.chip { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; background:var(--bg4); border:1px solid var(--border); border-radius:20px; font-size:12px; font-weight:600; color:var(--text2); }
 .chip.accent-chip { background:var(--accent-glow); border-color:var(--accent-line); color:var(--accent); }
-
-/* COUNTDOWN */
 .countdown-block { text-align:right; }
 .cd-label { font-size:10px; font-weight:700; letter-spacing:2px; color:var(--text3); text-transform:uppercase; margin-bottom:8px; }
 .cd-units { display:flex; gap:6px; justify-content:flex-end; }
-.cd-unit {
-  background:var(--bg4); border:1px solid var(--border);
-  border-radius:var(--r); padding:8px 10px; min-width:52px; text-align:center;
-}
-.cd-num {
-  font-family:'Roboto Mono',monospace;
-  font-size:24px; font-weight:600; line-height:1;
-  color:var(--accent);
-}
+.cd-unit { background:var(--bg4); border:1px solid var(--border); border-radius:var(--r); padding:8px 10px; min-width:52px; text-align:center; }
+.cd-num { font-family:'Roboto Mono',monospace; font-size:24px; font-weight:600; line-height:1; color:var(--accent); }
 .cd-txt { font-size:9px; font-weight:700; letter-spacing:1.5px; color:var(--text3); text-transform:uppercase; margin-top:2px; }
 
-/* ============================================================ CONTENT SHELL */
 .content { max-width:900px; margin:0 auto; padding:24px 16px 80px; }
-
-/* SECTION HEADER */
-.sec-header {
-  display:flex; align-items:center; gap:10px; margin-bottom:16px; margin-top:28px;
-}
-.sec-title {
-  font-size:12px; font-weight:700; letter-spacing:3px;
-  text-transform:uppercase; color:var(--text2); white-space:nowrap;
-}
+.sec-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; margin-top:28px; }
+.sec-title { font-size:12px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--text2); white-space:nowrap; }
 .sec-line { flex:1; height:1px; background:var(--border); }
-.sec-badge {
-  font-size:10px; font-weight:700; padding:2px 8px;
-  border-radius:3px; letter-spacing:.5px; text-transform:uppercase;
-}
+.sec-badge { font-size:10px; font-weight:700; padding:2px 8px; border-radius:3px; letter-spacing:.5px; text-transform:uppercase; }
 .sb-accent { background:var(--accent-glow); color:var(--accent); border:1px solid var(--accent-line); }
 .sb-green { background:rgba(0,208,96,.12); color:var(--green); border:1px solid rgba(0,208,96,.25); }
-.sb-gold  { background:rgba(245,197,24,.12); color:var(--gold); border:1px solid rgba(245,197,24,.25); }
+.sb-gold { background:rgba(245,197,24,.12); color:var(--gold); border:1px solid rgba(245,197,24,.25); }
 
-/* ============================================================ PICK COLUMNS */
-.picks-layout {
-  display:grid; grid-template-columns:1fr 1fr; gap:16px;
-}
+.picks-layout { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
 @media(max-width:640px){ .picks-layout{ grid-template-columns:1fr; } }
-
-.pick-card {
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:var(--r2); padding:16px; transition:.2s;
-  position:relative; overflow:hidden;
-}
+.pick-card { background:var(--bg3); border:1px solid var(--border); border-radius:var(--r2); padding:16px; transition:.2s; position:relative; overflow:hidden; }
 .pick-card.done { border-color:var(--accent-line); }
-.pick-card.done::before {
-  content:''; position:absolute; top:0; left:0; width:3px; bottom:0;
-  background:var(--accent);
-}
-.pick-card-label {
-  font-size:10px; font-weight:700; letter-spacing:2px;
-  color:var(--text3); text-transform:uppercase; margin-bottom:6px;
-}
-.pick-card-q {
-  font-size:17px; font-weight:700; text-transform:uppercase;
-  margin-bottom:12px; line-height:1.1;
-}
-.pick-pts {
-  font-size:10px; color:var(--accent); font-weight:700;
-  letter-spacing:1px; text-transform:uppercase; margin-top:8px;
-}
-
-/* DRIVER SELECT */
-.driver-select {
-  width:100%; padding:10px 36px 10px 12px;
-  background:var(--bg5);
-  border:1px solid var(--border2);
-  border-radius:var(--r); color:var(--text);
-  font-family:'Titillium Web',sans-serif; font-size:14px; font-weight:600;
-  cursor:pointer; outline:none; appearance:none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239999b0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat; background-position:right 12px center;
-  transition:.2s;
-}
+.pick-card.done::before { content:''; position:absolute; top:0; left:0; width:3px; bottom:0; background:var(--accent); }
+.pick-card-label { font-size:10px; font-weight:700; letter-spacing:2px; color:var(--text3); text-transform:uppercase; margin-bottom:6px; }
+.pick-card-q { font-size:17px; font-weight:700; text-transform:uppercase; margin-bottom:12px; line-height:1.1; }
+.pick-pts { font-size:10px; color:var(--accent); font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-top:8px; }
+.driver-select { width:100%; padding:10px 36px 10px 12px; background:var(--bg5); border:1px solid var(--border2); border-radius:var(--r); color:var(--text); font-family:'Titillium Web',sans-serif; font-size:14px; font-weight:600; cursor:pointer; outline:none; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239999b0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; transition:.2s; }
 .driver-select:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-glow); }
 .driver-select option { background:var(--bg4); }
 
-/* ============================================================ TOP 10 DRAG LIST */
-.top10-card {
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:var(--r2); overflow:hidden;
-}
-.top10-header {
-  padding:14px 18px;
-  border-bottom:1px solid var(--border);
-  display:flex; justify-content:space-between; align-items:center;
-}
+/* TOP 10 — searchable pool + ordered list */
+.top10-card { background:var(--bg3); border:1px solid var(--border); border-radius:var(--r2); overflow:hidden; }
+.top10-header { padding:14px 18px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
 .top10-title { font-size:16px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; }
 .top10-hint { font-size:11px; color:var(--text3); }
-
-.drag-list { list-style:none; padding:8px; display:flex; flex-direction:column; gap:4px; }
-.drag-item {
-  display:grid; grid-template-columns:32px 24px 1fr auto;
-  align-items:center; gap:8px;
-  padding:9px 10px;
-  background:var(--bg4); border:1px solid var(--border);
-  border-radius:var(--r); cursor:grab; user-select:none;
-  transition: background .15s, border-color .15s, transform .15s;
-  touch-action: none;
-}
+.top10-layout { display:grid; grid-template-columns:1fr 1fr; gap:0; }
+@media(max-width:640px){ .top10-layout{ grid-template-columns:1fr; } }
+.pool-panel { padding:12px; border-right:1px solid var(--border); }
+.pool-search { width:100%; padding:8px 12px; background:var(--bg5); border:1px solid var(--border2); border-radius:var(--r); color:var(--text); font-family:'Titillium Web',sans-serif; font-size:13px; outline:none; margin-bottom:8px; }
+.pool-search:focus { border-color:var(--accent); }
+.pool-list { display:flex; flex-direction:column; gap:3px; max-height:460px; overflow-y:auto; }
+.pool-item { display:flex; align-items:center; justify-content:space-between; padding:8px 10px; background:var(--bg4); border:1px solid var(--border); border-radius:var(--r); cursor:pointer; transition:.15s; font-size:13px; }
+.pool-item:hover { border-color:var(--accent-line); background:var(--accent-glow); }
+.pool-item.in-list { opacity:.35; cursor:default; pointer-events:none; }
+.pool-item-name { font-weight:700; }
+.pool-item-team { font-size:11px; color:var(--text2); }
+.pool-add { font-size:18px; color:var(--accent); font-weight:700; }
+.ordered-panel { padding:12px; }
+.ordered-label { font-size:10px; font-weight:700; letter-spacing:2px; color:var(--text3); text-transform:uppercase; margin-bottom:8px; }
+.drag-list { list-style:none; display:flex; flex-direction:column; gap:4px; }
+.drag-item { display:grid; grid-template-columns:32px 24px 1fr auto; align-items:center; gap:8px; padding:9px 10px; background:var(--bg4); border:1px solid var(--border); border-radius:var(--r); cursor:grab; user-select:none; transition:background .15s,border-color .15s,transform .15s; touch-action:none; }
 .drag-item:active { cursor:grabbing; }
-.drag-item.dragging {
-  background:var(--bg5); border-color:var(--accent-line);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5); transform:scale(1.02);
-  opacity:.9;
-}
+.drag-item.dragging { background:var(--bg5); border-color:var(--accent-line); box-shadow:0 8px 32px rgba(0,0,0,0.5); transform:scale(1.02); opacity:.9; }
 .drag-item.drag-over { border-color:var(--accent); background:var(--accent-glow); }
-.drag-pos {
-  font-family:'Roboto Mono',monospace;
-  font-size:11px; font-weight:600; color:var(--text3); text-align:right;
-}
-.drag-pos.p1 { color:var(--gold); }
-.drag-pos.p2 { color:var(--silver); }
-.drag-pos.p3 { color:var(--bronze); }
+.drag-pos { font-family:'Roboto Mono',monospace; font-size:11px; font-weight:600; color:var(--text3); text-align:right; }
+.drag-pos.p1 { color:var(--gold); } .drag-pos.p2 { color:var(--silver); } .drag-pos.p3 { color:var(--bronze); }
 .drag-handle { color:var(--text3); font-size:14px; text-align:center; }
-.drag-driver-name { font-size:14px; font-weight:700; }
-.drag-driver-team { font-size:11px; color:var(--text2); }
-.drag-abbr {
-  font-family:'Roboto Mono',monospace;
-  font-size:11px; font-weight:600; color:var(--text3); letter-spacing:.5px;
-}
+.drag-driver-name { font-size:13px; font-weight:700; }
+.drag-driver-team { font-size:10px; color:var(--text2); }
+.drag-remove { font-size:14px; color:var(--text3); cursor:pointer; background:none; border:none; padding:2px 4px; transition:.15s; }
+.drag-remove:hover { color:var(--red-flag); }
+.drag-item.joker-active { border-color:var(--gold) !important; background:rgba(245,197,24,.1) !important; }
+.top10-empty { padding:24px; text-align:center; color:var(--text3); font-size:13px; }
 
-/* Joker badge on drag items */
-.drag-item.joker-active {
-  border-color: var(--gold) !important;
-  background: rgba(245,197,24,.1) !important;
-}
-.joker-crown { font-size:14px; }
-
-/* ============================================================ JOKER WILDCARD */
-.joker-section {
-  background: linear-gradient(135deg, rgba(245,197,24,.08), rgba(245,197,24,.03));
-  border:1px solid rgba(245,197,24,.25);
-  border-radius:var(--r2); padding:18px; margin-bottom:0;
-}
+.joker-section { background:linear-gradient(135deg,rgba(245,197,24,.08),rgba(245,197,24,.03)); border:1px solid rgba(245,197,24,.25); border-radius:var(--r2); padding:18px; }
 .joker-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
 .joker-icon { font-size:24px; }
 .joker-title { font-size:16px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; }
 .joker-sub { font-size:12px; color:var(--text2); margin-top:2px; }
-.joker-uses {
-  margin-left:auto;
-  font-family:'Roboto Mono',monospace;
-  font-size:13px; font-weight:600; color:var(--gold);
-}
-.joker-driver-select {
-  width:100%; padding:10px 12px;
-  background:var(--bg4); border:1px solid rgba(245,197,24,.3);
-  border-radius:var(--r); color:var(--text);
-  font-family:'Titillium Web',sans-serif; font-size:14px; font-weight:600;
-  cursor:pointer; outline:none; appearance:none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23f5c518' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat; background-position:right 12px center;
-  padding-right:36px;
-}
+.joker-uses { margin-left:auto; font-family:'Roboto Mono',monospace; font-size:13px; font-weight:600; color:var(--gold); }
+.joker-driver-select { width:100%; padding:10px 12px; background:var(--bg4); border:1px solid rgba(245,197,24,.3); border-radius:var(--r); color:var(--text); font-family:'Titillium Web',sans-serif; font-size:14px; font-weight:600; cursor:pointer; outline:none; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23f5c518' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:36px; }
 .joker-driver-select:focus { box-shadow:0 0 0 3px rgba(245,197,24,.2); border-color:var(--gold); }
 .joker-note { font-size:11px; color:var(--text2); margin-top:8px; line-height:1.5; }
 
-/* ============================================================ SUBMIT BAR */
-.submit-bar {
-  position:sticky; bottom:0; z-index:100;
-  background:rgba(8,8,11,.95); backdrop-filter:blur(16px);
-  border-top:1px solid var(--border);
-  padding:12px 16px;
-  display:flex; justify-content:space-between; align-items:center; gap:12px;
-  flex-wrap:wrap;
-}
+.submit-bar { position:sticky; bottom:0; z-index:100; background:rgba(8,8,11,.95); backdrop-filter:blur(16px); border-top:1px solid var(--border); padding:12px 16px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
 .submit-progress { display:flex; flex-direction:column; gap:6px; }
 .submit-progress-label { font-size:12px; font-weight:600; color:var(--text2); }
-.progress-track {
-  width:180px; height:4px; background:var(--bg5);
-  border-radius:2px; overflow:hidden;
-}
-.progress-fill {
-  height:100%; background:var(--accent);
-  border-radius:2px; transition:width .3s ease;
-}
-.btn-lock {
-  padding:12px 28px;
-  background:var(--accent); color:#fff;
-  font-family:'Titillium Web',sans-serif;
-  font-weight:900; font-size:15px; letter-spacing:2px;
-  text-transform:uppercase; border:none; border-radius:var(--r);
-  cursor:pointer; transition:.2s;
-  display:flex; align-items:center; gap:8px;
-}
+.progress-track { width:180px; height:4px; background:var(--bg5); border-radius:2px; overflow:hidden; }
+.progress-fill { height:100%; background:var(--accent); border-radius:2px; transition:width .3s ease; }
+.btn-lock { padding:12px 28px; background:var(--accent); color:#fff; font-family:'Titillium Web',sans-serif; font-weight:900; font-size:15px; letter-spacing:2px; text-transform:uppercase; border:none; border-radius:var(--r); cursor:pointer; transition:.2s; display:flex; align-items:center; gap:8px; }
 .btn-lock:hover { opacity:.88; transform:translateY(-1px); }
 .btn-lock:disabled { background:var(--bg5); color:var(--text3); cursor:not-allowed; transform:none; opacity:1; }
 
-/* ============================================================ LOCKED STATE */
-.locked-banner {
-  background:linear-gradient(135deg, rgba(0,208,96,.1), rgba(0,208,96,.04));
-  border:1px solid rgba(0,208,96,.3);
-  border-radius:var(--r2); padding:24px;
-  text-align:center; margin-bottom:20px;
-}
+.locked-banner { background:linear-gradient(135deg,rgba(0,208,96,.1),rgba(0,208,96,.04)); border:1px solid rgba(0,208,96,.3); border-radius:var(--r2); padding:24px; text-align:center; margin-bottom:20px; }
 .locked-icon { font-size:40px; margin-bottom:8px; }
 .locked-title { font-size:22px; font-weight:900; text-transform:uppercase; color:var(--green); letter-spacing:1px; }
 .locked-sub { font-size:13px; color:var(--text2); margin-top:4px; }
 .locked-chips { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:14px; }
-.locked-chip {
-  padding:5px 12px; background:var(--bg4);
-  border:1px solid var(--border); border-radius:20px;
-  font-size:12px; font-weight:700;
-  display:flex; flex-direction:column; align-items:center; gap:1px;
-}
+.locked-chip { padding:5px 12px; background:var(--bg4); border:1px solid var(--border); border-radius:20px; font-size:12px; font-weight:700; display:flex; flex-direction:column; align-items:center; gap:1px; }
 .locked-chip .lc-label { font-size:9px; color:var(--text3); font-weight:600; letter-spacing:1px; text-transform:uppercase; }
-.btn-edit {
-  margin-top:14px; padding:8px 20px;
-  background:none; border:1px solid var(--border2);
-  color:var(--text2); border-radius:var(--r);
-  font-family:'Titillium Web',sans-serif; font-weight:700;
-  font-size:13px; letter-spacing:1px; text-transform:uppercase;
-  cursor:pointer; transition:.2s;
-}
+.btn-edit { margin-top:14px; padding:8px 20px; background:none; border:1px solid var(--border2); color:var(--text2); border-radius:var(--r); font-family:'Titillium Web',sans-serif; font-weight:700; font-size:13px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; transition:.2s; }
 .btn-edit:hover { color:var(--text); border-color:var(--text2); }
 
-/* ============================================================ LEADERBOARD */
-.lb-card {
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:var(--r2); overflow:hidden;
-}
-.lb-row {
-  display:grid; grid-template-columns:44px 1fr auto 48px;
-  align-items:center; gap:8px; padding:11px 16px;
-  border-bottom:1px solid var(--border);
-  transition:background .15s;
-}
+.lb-card { background:var(--bg3); border:1px solid var(--border); border-radius:var(--r2); overflow:hidden; }
+.lb-row { display:grid; grid-template-columns:44px 1fr auto 48px; align-items:center; gap:8px; padding:11px 16px; border-bottom:1px solid var(--border); transition:background .15s; }
 .lb-row:last-child { border-bottom:none; }
 .lb-row:hover { background:var(--bg4); }
 .lb-row.is-me { background:var(--accent-glow); }
-.lb-rank {
-  font-family:'Roboto Mono',monospace;
-  font-size:16px; font-weight:700; text-align:center;
-}
-.lb-rank.r1 { color:var(--gold); font-size:20px; }
-.lb-rank.r2 { color:var(--silver); font-size:18px; }
-.lb-rank.r3 { color:var(--bronze); font-size:18px; }
-.lb-rank.rn { color:var(--text3); }
+.lb-rank { font-family:'Roboto Mono',monospace; font-size:16px; font-weight:700; text-align:center; }
+.lb-rank.r1 { color:var(--gold); font-size:20px; } .lb-rank.r2 { color:var(--silver); font-size:18px; } .lb-rank.r3 { color:var(--bronze); font-size:18px; } .lb-rank.rn { color:var(--text3); }
 .lb-name { font-size:14px; font-weight:700; }
 .lb-name.me-name { color:var(--accent); }
 .lb-meta { font-size:11px; color:var(--text3); margin-top:1px; }
-.lb-score {
-  font-family:'Roboto Mono',monospace;
-  font-size:20px; font-weight:600; text-align:right;
-}
+.lb-score { font-family:'Roboto Mono',monospace; font-size:20px; font-weight:600; text-align:right; }
 .lb-delta { font-size:12px; font-weight:700; text-align:right; }
-.lb-delta.up { color:var(--green); }
-.lb-delta.dn { color:var(--red-flag); }
-.lb-delta.eq { color:var(--text3); }
+.lb-delta.up { color:var(--green); } .lb-delta.dn { color:var(--red-flag); } .lb-delta.eq { color:var(--text3); }
 
-/* Worst pick badge */
-.worst-badge {
-  display:inline-flex; align-items:center; gap:4px;
-  padding:2px 7px; border-radius:3px;
-  font-size:10px; font-weight:700; letter-spacing:.5px; text-transform:uppercase;
-  background:rgba(255,45,45,.12); color:var(--red-flag);
-  border:1px solid rgba(255,45,45,.25);
-}
-
-/* ============================================================ SCHEDULE */
 .sched-list { display:flex; flex-direction:column; gap:8px; }
-.sched-row {
-  display:grid; grid-template-columns:48px 1fr auto;
-  align-items:center; gap:14px;
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:var(--r2); padding:14px 18px;
-  transition:.2s;
-}
+.sched-row { display:grid; grid-template-columns:48px 1fr auto; align-items:center; gap:14px; background:var(--bg3); border:1px solid var(--border); border-radius:var(--r2); padding:14px 18px; transition:.2s; }
 .sched-row:hover { border-color:var(--accent-line); }
 .sched-row.sched-done { opacity:.5; }
 .sched-row.sched-next { border-color:var(--accent-line); background:var(--accent-glow); }
-.sched-round {
-  font-family:'Roboto Mono',monospace;
-  font-size:22px; font-weight:700; color:var(--text3); text-align:center;
-}
+.sched-round { font-family:'Roboto Mono',monospace; font-size:22px; font-weight:700; color:var(--text3); text-align:center; }
 .sched-name { font-size:17px; font-weight:700; text-transform:uppercase; letter-spacing:.3px; }
 .sched-circuit { font-size:12px; color:var(--text2); margin-top:2px; }
 .sched-date { font-size:13px; font-weight:600; color:var(--text2); text-align:right; white-space:nowrap; }
 .sched-status { margin-top:3px; text-align:right; }
+.sched-loading { padding:32px; text-align:center; color:var(--text3); font-size:13px; }
 
-/* ============================================================ GROUPS */
 .groups-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; }
-.group-card {
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:var(--r2); padding:18px;
-  cursor:pointer; transition:.2s; position:relative; overflow:hidden;
-}
+.group-card { background:var(--bg3); border:1px solid var(--border); border-radius:var(--r2); padding:18px; cursor:pointer; transition:.2s; position:relative; overflow:hidden; }
 .group-card:hover { border-color:var(--accent-line); transform:translateY(-2px); }
 .group-card-name { font-size:20px; font-weight:900; text-transform:uppercase; letter-spacing:.5px; margin-bottom:3px; }
 .group-card-count { font-size:12px; color:var(--text2); margin-bottom:12px; }
 .group-card-rank { font-family:'Roboto Mono',monospace; font-size:36px; font-weight:700; color:var(--accent); line-height:1; }
 .group-rank-label { font-size:11px; color:var(--text3); text-transform:uppercase; letter-spacing:1px; }
-.group-code-pill {
-  position:absolute; top:14px; right:14px;
-  background:var(--bg5); border:1px solid var(--border);
-  border-radius:4px; padding:3px 8px;
-  font-family:'Roboto Mono',monospace; font-size:11px; font-weight:600; color:var(--text3);
-  cursor:pointer; transition:.2s; letter-spacing:1px;
-}
+.group-code-pill { position:absolute; top:14px; right:14px; background:var(--bg5); border:1px solid var(--border); border-radius:4px; padding:3px 8px; font-family:'Roboto Mono',monospace; font-size:11px; font-weight:600; color:var(--text3); cursor:pointer; transition:.2s; letter-spacing:1px; }
 .group-code-pill:hover { color:var(--text); border-color:var(--text3); }
 
-/* ============================================================ PROFILE / SETTINGS */
 .profile-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
 @media(max-width:540px){ .profile-grid{ grid-template-columns:1fr; } }
-.setting-card {
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:var(--r2); padding:18px;
-}
+.setting-card { background:var(--bg3); border:1px solid var(--border); border-radius:var(--r2); padding:18px; }
 .setting-title { font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:14px; }
-
-.team-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; }
-.team-btn {
-  padding:8px 4px; border-radius:var(--r);
-  border:1px solid var(--border); background:var(--bg4);
-  cursor:pointer; font-family:'Titillium Web',sans-serif;
-  font-size:10px; font-weight:700; text-align:center; color:var(--text2);
-  text-transform:uppercase; letter-spacing:.5px; transition:.15s;
-  display:flex; flex-direction:column; align-items:center; gap:4px;
-}
+.team-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+.team-btn { padding:8px 4px; border-radius:var(--r); border:1px solid var(--border); background:var(--bg4); cursor:pointer; font-family:'Titillium Web',sans-serif; font-size:10px; font-weight:700; text-align:center; color:var(--text2); text-transform:uppercase; letter-spacing:.5px; transition:.15s; display:flex; flex-direction:column; align-items:center; gap:4px; }
 .team-btn:hover { border-color:var(--text3); color:var(--text); }
 .team-btn.active { border-color:var(--accent); background:var(--accent-glow); color:var(--accent); }
 .team-swatch { width:18px; height:4px; border-radius:2px; }
-
-.tz-select {
-  width:100%; padding:10px 12px;
-  background:var(--bg5); border:1px solid var(--border2);
-  border-radius:var(--r); color:var(--text);
-  font-family:'Titillium Web',sans-serif; font-size:14px; font-weight:600;
-  outline:none; appearance:none; cursor:pointer;
-}
+.tz-select { width:100%; padding:10px 12px; background:var(--bg5); border:1px solid var(--border2); border-radius:var(--r); color:var(--text); font-family:'Titillium Web',sans-serif; font-size:14px; font-weight:600; outline:none; appearance:none; cursor:pointer; }
 .tz-select:focus { border-color:var(--accent); }
 
-/* ============================================================ MODALS */
-.overlay {
-  position:fixed; inset:0; z-index:500;
-  background:rgba(0,0,0,.75); backdrop-filter:blur(6px);
-  display:flex; align-items:center; justify-content:center; padding:20px;
-}
+.overlay { position:fixed; inset:0; z-index:500; background:rgba(0,0,0,.75); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; padding:20px; }
 .overlay.hidden { display:none; }
-.modal {
-  background:var(--bg3); border:1px solid var(--border2);
-  border-radius:14px; padding:28px; max-width:420px; width:100%;
-  position:relative; box-shadow:var(--shadow);
-}
-.modal-close {
-  position:absolute; top:14px; right:14px;
-  background:none; border:none; color:var(--text3);
-  font-size:18px; cursor:pointer; transition:.2s; line-height:1;
-}
+.modal { background:var(--bg3); border:1px solid var(--border2); border-radius:14px; padding:28px; max-width:420px; width:100%; position:relative; box-shadow:var(--shadow); }
+.modal-close { position:absolute; top:14px; right:14px; background:none; border:none; color:var(--text3); font-size:18px; cursor:pointer; transition:.2s; line-height:1; }
 .modal-close:hover { color:var(--text); }
 .modal-title { font-size:22px; font-weight:900; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
 .modal-sub { font-size:13px; color:var(--text2); margin-bottom:22px; line-height:1.5; }
-
 .form-group { display:flex; flex-direction:column; gap:7px; margin-bottom:14px; }
 .form-label { font-size:11px; font-weight:700; letter-spacing:1.5px; color:var(--text3); text-transform:uppercase; }
-.form-input {
-  padding:10px 12px;
-  background:var(--bg5); border:1px solid var(--border2);
-  border-radius:var(--r); color:var(--text);
-  font-family:'Titillium Web',sans-serif; font-size:14px; font-weight:600;
-  outline:none; transition:.2s;
-}
+.form-input { padding:10px 12px; background:var(--bg5); border:1px solid var(--border2); border-radius:var(--r); color:var(--text); font-family:'Titillium Web',sans-serif; font-size:14px; font-weight:600; outline:none; transition:.2s; }
 .form-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-glow); }
 .form-input::placeholder { color:var(--text3); font-weight:400; }
-
 .tab-row { display:flex; background:var(--bg4); border-radius:var(--r); padding:3px; margin-bottom:18px; gap:3px; }
-.tab-btn {
-  flex:1; padding:7px;
-  background:none; border:none; border-radius:5px;
-  color:var(--text3); font-family:'Titillium Web',sans-serif;
-  font-weight:700; font-size:13px; letter-spacing:1px;
-  text-transform:uppercase; cursor:pointer; transition:.2s;
-}
+.tab-btn { flex:1; padding:7px; background:none; border:none; border-radius:5px; color:var(--text3); font-family:'Titillium Web',sans-serif; font-weight:700; font-size:13px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; transition:.2s; }
 .tab-btn.active { background:var(--bg3); color:var(--text); }
-
-.btn-full {
-  width:100%; padding:12px;
-  background:var(--accent); color:#fff;
-  font-family:'Titillium Web',sans-serif;
-  font-weight:900; font-size:15px; letter-spacing:2px;
-  text-transform:uppercase; border:none; border-radius:var(--r);
-  cursor:pointer; transition:.2s; margin-top:4px;
-}
+.btn-full { width:100%; padding:12px; background:var(--accent); color:#fff; font-family:'Titillium Web',sans-serif; font-weight:900; font-size:15px; letter-spacing:2px; text-transform:uppercase; border:none; border-radius:var(--r); cursor:pointer; transition:.2s; margin-top:4px; }
 .btn-full:hover { opacity:.88; }
-.btn-outline {
-  padding:9px 20px;
-  background:none; border:1px solid var(--border2);
-  color:var(--text2); border-radius:var(--r);
-  font-family:'Titillium Web',sans-serif; font-weight:700;
-  font-size:13px; letter-spacing:1px; text-transform:uppercase;
-  cursor:pointer; transition:.2s;
-}
+.btn-outline { padding:9px 20px; background:none; border:1px solid var(--border2); color:var(--text2); border-radius:var(--r); font-family:'Titillium Web',sans-serif; font-weight:700; font-size:13px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; transition:.2s; }
 .btn-outline:hover { border-color:var(--text2); color:var(--text); }
 
-/* ============================================================ TOAST */
-.toast {
-  position:fixed; bottom:80px; left:50%;
-  transform:translateX(-50%) translateY(20px);
-  background:var(--bg4); border:1px solid var(--border2);
-  border-radius:8px; padding:10px 18px;
-  font-size:13px; font-weight:600;
-  transition:all .3s cubic-bezier(.34,1.56,.64,1);
-  z-index:999; white-space:nowrap; opacity:0;
-  pointer-events:none;
-}
+.toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--bg4); border:1px solid var(--border2); border-radius:8px; padding:10px 18px; font-size:13px; font-weight:600; transition:all .3s cubic-bezier(.34,1.56,.64,1); z-index:999; white-space:nowrap; opacity:0; pointer-events:none; }
 .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
 .toast.success { border-color:rgba(0,208,96,.4); color:var(--green); }
 .toast.warn { border-color:rgba(245,197,24,.4); color:var(--gold); }
 .toast.error { border-color:rgba(255,45,45,.4); color:var(--red-flag); }
 
-/* ============================================================ UTILITY */
-.flex-row { display:flex; align-items:center; gap:10px; }
-.flex-between { display:flex; justify-content:space-between; align-items:center; }
-.mt8 { margin-top:8px; }
-.mt16 { margin-top:16px; }
-.gap8 { gap:8px; }
-.text-dim { color:var(--text2); font-size:13px; }
+.api-dot { display:inline-flex; align-items:center; gap:5px; font-size:11px; color:var(--green); font-weight:600; }
+.api-dot::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
+.api-dot.loading { color:var(--gold); }
+.api-dot.loading::before { background:var(--gold); }
 
-.empty-state { text-align:center; padding:48px 20px; color:var(--text3); }
-.empty-icon { font-size:44px; margin-bottom:12px; }
-.empty-text { font-size:14px; line-height:1.6; }
-
-/* Scoring quick-ref */
-.scoring-strip {
-  display:flex; flex-wrap:wrap; gap:8px; padding:12px 16px;
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:var(--r2); margin-bottom:20px;
-}
+.scoring-strip { display:flex; flex-wrap:wrap; gap:8px; padding:12px 16px; background:var(--bg3); border:1px solid var(--border); border-radius:var(--r2); margin-bottom:20px; }
 .score-ref { font-size:12px; color:var(--text2); display:flex; align-items:center; gap:4px; }
 .score-ref strong { color:var(--text); }
 
-/* Live API indicator */
-.api-dot {
-  display:inline-flex; align-items:center; gap:5px;
-  font-size:11px; color:var(--green); font-weight:600;
-}
-.api-dot::before {
-  content:''; width:6px; height:6px; border-radius:50%;
-  background:var(--green); animation:pulse 2s infinite;
-}
-
-/* Mobile nav bottom bar */
-.bottom-nav {
-  display:none;
-  position:fixed; bottom:0; left:0; right:0; z-index:200;
-  background:rgba(8,8,11,.96); backdrop-filter:blur(16px);
-  border-top:1px solid var(--border);
-  padding:8px 0 env(safe-area-inset-bottom,8px);
-}
-@media(max-width:600px){
-  .bottom-nav { display:flex; }
-  .nav-links { display:none; }
-  .nav-user-name { display:none; }
-  .content { padding-bottom:90px; }
-  .submit-bar { bottom:58px; }
-}
-.bnav-btn {
-  flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
-  background:none; border:none; cursor:pointer; padding:6px 4px;
-  color:var(--text3); font-family:'Titillium Web',sans-serif;
-  font-size:9px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
-  transition:.2s;
-}
+.bottom-nav { display:none; position:fixed; bottom:0; left:0; right:0; z-index:200; background:rgba(8,8,11,.96); backdrop-filter:blur(16px); border-top:1px solid var(--border); padding:8px 0 env(safe-area-inset-bottom,8px); }
+@media(max-width:600px){ .bottom-nav{display:flex;} .nav-links{display:none;} .nav-user-name{display:none;} .content{padding-bottom:90px;} .submit-bar{bottom:58px;} }
+.bnav-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; cursor:pointer; padding:6px 4px; color:var(--text3); font-family:'Titillium Web',sans-serif; font-size:9px; font-weight:700; letter-spacing:1px; text-transform:uppercase; transition:.2s; }
 .bnav-btn.active { color:var(--accent); }
 .bnav-icon { font-size:20px; }
-/* ============================================================ FAQ */
+
 .faq-list { display:flex; flex-direction:column; gap:6px; margin-bottom:8px; }
-
-.faq-item {
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:var(--r2); overflow:hidden; transition:.2s;
-}
+.faq-item { background:var(--bg3); border:1px solid var(--border); border-radius:var(--r2); overflow:hidden; transition:.2s; }
 .faq-item.open { border-color:var(--accent-line); }
-
-.faq-q {
-  width:100%; padding:16px 18px;
-  display:flex; justify-content:space-between; align-items:center; gap:12px;
-  background:none; border:none; cursor:pointer; text-align:left;
-  font-family:'Titillium Web',sans-serif; font-size:15px; font-weight:700;
-  color:var(--text); transition:.15s;
-}
+.faq-q { width:100%; padding:16px 18px; display:flex; justify-content:space-between; align-items:center; gap:12px; background:none; border:none; cursor:pointer; text-align:left; font-family:'Titillium Web',sans-serif; font-size:15px; font-weight:700; color:var(--text); transition:.15s; }
 .faq-q:hover { background:var(--bg4); }
 .faq-item.open .faq-q { color:var(--accent); }
-.faq-arrow {
-  font-size:18px; color:var(--text3); flex-shrink:0;
-  transition:transform .25s ease;
-}
+.faq-arrow { font-size:18px; color:var(--text3); flex-shrink:0; transition:transform .25s ease; }
 .faq-item.open .faq-arrow { transform:rotate(180deg); color:var(--accent); }
-
-.faq-a {
-  display:none; padding:0 18px 18px;
-  font-size:14px; color:var(--text2); line-height:1.7;
-}
+.faq-a { display:none; padding:0 18px 18px; font-size:14px; color:var(--text2); line-height:1.7; }
 .faq-item.open .faq-a { display:block; animation:fadeIn .2s ease; }
-.faq-a p + p { margin-top:8px; }
-.faq-a strong { color:var(--text); }
 
-.faq-list-inner {
-  margin:10px 0 4px 16px;
-  display:flex; flex-direction:column; gap:6px;
-  font-size:13px; color:var(--text2);
-}
-.faq-list-inner li { line-height:1.5; }
-.faq-steps { counter-reset:steps; list-style:none; margin-left:0; }
-.faq-steps li {
-  counter-increment:steps;
-  padding-left:28px; position:relative;
-}
-.faq-steps li::before {
-  content:counter(steps);
-  position:absolute; left:0; top:1px;
-  width:18px; height:18px; border-radius:50%;
-  background:var(--accent-glow); border:1px solid var(--accent-line);
-  color:var(--accent); font-size:10px; font-weight:800;
-  display:flex; align-items:center; justify-content:center;
-  font-family:'Roboto Mono',monospace;
-}
-
-.faq-tip {
-  margin-top:12px; padding:10px 14px;
-  background:var(--bg5); border-left:3px solid var(--accent);
-  border-radius:0 var(--r) var(--r) 0;
-  font-size:12px; color:var(--text2); line-height:1.5;
-}
-
-/* Scoring table inside FAQ */
-.scoring-table { display:flex; flex-direction:column; gap:0; border-radius:var(--r); overflow:hidden; border:1px solid var(--border); }
-.score-row {
-  display:grid; grid-template-columns:28px 1fr auto;
-  align-items:center; gap:10px; padding:10px 14px;
-  border-bottom:1px solid var(--border); font-size:13px;
-}
-.score-row:last-child { border-bottom:none; }
-.score-row:nth-child(odd) { background:var(--bg4); }
-.score-row-gold { background:rgba(245,197,24,.06) !important; }
-.score-icon { font-size:15px; text-align:center; }
-.score-desc { color:var(--text2); }
-.score-pts { font-family:'Roboto Mono',monospace; font-weight:700; color:var(--accent); white-space:nowrap; }
+.standings-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:640px){ .standings-grid{ grid-template-columns:1fr; } }
 </style>
 </head>
 <body data-team="red-bull">
 
-<!-- ======================================================== NAV -->
 <nav>
   <div class="nav-brand" onclick="showPage('picks')">
-    <span class="box">CALL</span><span class="two"> THE GRID</span>
+    <span class="box">CALL</span><span style="color:var(--text)"> THE GRID</span>
     <div class="dot"></div>
   </div>
   <div class="nav-links">
@@ -723,20 +278,17 @@ nav {
   </div>
 </nav>
 
-<!-- ======================================================== PICKS PAGE -->
+<!-- PICKS PAGE -->
 <div class="page active" id="page-picks">
-
-  <!-- Race Banner -->
   <div class="race-banner">
     <div class="race-banner-inner">
       <div>
-        <div class="race-eyebrow">🏁 2025 Season · Round 5 of 24</div>
-        <div class="race-title">🇲🇨 Monaco<br>Grand Prix</div>
-        <div class="race-subtitle">Circuit de Monaco · Monte Carlo</div>
+        <div class="race-eyebrow" id="race-eyebrow">⏳ Loading race data...</div>
+        <div class="race-title" id="race-title">—</div>
+        <div class="race-subtitle" id="race-subtitle">—</div>
         <div class="race-info-chips">
-          <span class="chip accent-chip"><span class="icon">⏰</span> Locks at Qualifying — <span id="lock-time">Sat 14:00 CET</span></span>
-          <span class="chip"><span class="icon">🗓</span> Race: Sun 25 May</span>
-          <span class="chip api-dot" id="api-status">Live Data</span>
+          <span class="chip accent-chip">⏰ Locks at Qualifying</span>
+          <span class="chip api-dot loading" id="api-status">Loading</span>
         </div>
       </div>
       <div class="countdown-block">
@@ -752,8 +304,6 @@ nav {
   </div>
 
   <div class="content">
-
-    <!-- Locked state (shown after submit) -->
     <div id="locked-state" style="display:none">
       <div class="locked-banner">
         <div class="locked-icon">🔒</div>
@@ -764,10 +314,7 @@ nav {
       </div>
     </div>
 
-    <!-- Active pick form -->
     <div id="active-picks">
-
-      <!-- Scoring ref -->
       <div class="scoring-strip">
         <span class="score-ref">🎯 Exact finish <strong>+10</strong></span>
         <span class="score-ref">📍 In top 10 <strong>+5</strong></span>
@@ -779,44 +326,34 @@ nav {
         <span class="score-ref">🃏 Joker <strong>×2</strong></span>
       </div>
 
-      <!-- QUALIFYING PICKS -->
       <div class="sec-header">
         <span class="sec-title">Qualifying</span>
         <div class="sec-line"></div>
         <span class="sec-badge sb-accent">Lock before Q1</span>
       </div>
-
       <div class="picks-layout">
         <div class="pick-card" id="qc-pole">
           <div class="pick-card-label">🏎️ Pole Position</div>
           <div class="pick-card-q">Who takes P1 in Quali?</div>
-          <select class="driver-select" id="sel-pole" onchange="setPick('pole',this.value)">
-            <option value="">Select driver...</option>
-          </select>
+          <select class="driver-select" id="sel-pole" onchange="setPick('pole',this.value)"><option value="">Select driver...</option></select>
           <div class="pick-pts">+5 pts</div>
         </div>
         <div class="pick-card" id="qc-q2">
           <div class="pick-card-label">P2 Qualifying</div>
           <div class="pick-card-q">Who qualifies in P2?</div>
-          <select class="driver-select" id="sel-q2" onchange="setPick('q2',this.value)">
-            <option value="">Select driver...</option>
-          </select>
+          <select class="driver-select" id="sel-q2" onchange="setPick('q2',this.value)"><option value="">Select driver...</option></select>
           <div class="pick-pts">+3 pts</div>
         </div>
         <div class="pick-card" id="qc-q3">
           <div class="pick-card-label">P3 Qualifying</div>
           <div class="pick-card-q">Who qualifies in P3?</div>
-          <select class="driver-select" id="sel-q3" onchange="setPick('q3',this.value)">
-            <option value="">Select driver...</option>
-          </select>
+          <select class="driver-select" id="sel-q3" onchange="setPick('q3',this.value)"><option value="">Select driver...</option></select>
           <div class="pick-pts">+1 pt</div>
         </div>
         <div class="pick-card" id="qc-fl">
           <div class="pick-card-label">⚡ Fastest Lap</div>
           <div class="pick-card-q">Who sets the fastest lap?</div>
-          <select class="driver-select" id="sel-fl" onchange="setPick('fl',this.value)">
-            <option value="">Select driver...</option>
-          </select>
+          <select class="driver-select" id="sel-fl" onchange="setPick('fl',this.value)"><option value="">Select driver...</option></select>
           <div class="pick-pts">+5 pts</div>
         </div>
         <div class="pick-card" id="qc-dnf">
@@ -830,33 +367,42 @@ nav {
         </div>
       </div>
 
-      <!-- TOP 10 PICKS -->
-      <div class="sec-header mt16">
+      <div class="sec-header" style="margin-top:28px">
         <span class="sec-title">Race Top 10</span>
         <div class="sec-line"></div>
-        <span class="sec-badge sb-accent">Drag to order</span>
+        <span class="sec-badge sb-accent">Pick from all 22 drivers</span>
       </div>
 
       <div class="top10-card">
         <div class="top10-header">
           <div>
             <div class="top10-title">Predicted Finishing Order</div>
-            <div class="top10-hint">Drag drivers into your predicted P1–P10</div>
+            <div class="top10-hint">Add drivers from the pool → drag to reorder</div>
           </div>
           <div style="text-align:right">
-            <div style="font-size:11px;color:var(--text3)">Exact +10 · In top 10 +5</div>
+            <div style="font-size:11px;color:var(--text3)" id="top10-count">0 / 10 picked</div>
           </div>
         </div>
-        <ul class="drag-list" id="drag-list"></ul>
+        <div class="top10-layout">
+          <div class="pool-panel">
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:8px">Driver Pool — click to add</div>
+            <input class="pool-search" id="pool-search" placeholder="Search driver or team..." oninput="filterPool(this.value)">
+            <div class="pool-list" id="pool-list"></div>
+          </div>
+          <div class="ordered-panel">
+            <div class="ordered-label">Your P1–P10 · drag to reorder</div>
+            <ul class="drag-list" id="drag-list">
+              <li class="top10-empty" id="drag-empty">← Add drivers from the pool</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
-      <!-- JOKER WILDCARD -->
-      <div class="sec-header mt16">
+      <div class="sec-header" style="margin-top:28px">
         <span class="sec-title">Joker Wildcard</span>
         <div class="sec-line"></div>
         <span class="sec-badge sb-gold">3 uses per season</span>
       </div>
-
       <div class="joker-section">
         <div class="joker-header">
           <div class="joker-icon">🃏</div>
@@ -869,158 +415,113 @@ nav {
         <select class="joker-driver-select" id="sel-joker" onchange="setJoker(this.value)">
           <option value="">No joker this race</option>
         </select>
-        <div class="joker-note">⚠️ If your joker driver scores points, they count double. Use wisely — only 3 per season. Once locked, you can't change it.</div>
+        <div class="joker-note">⚠️ If your joker driver scores points, they count double. Only 3 per season — once locked, you can't change it.</div>
       </div>
+    </div>
+  </div>
 
-    </div><!-- /active-picks -->
-  </div><!-- /content -->
-
-  <!-- Submit Bar -->
   <div class="submit-bar" id="submit-bar">
     <div class="submit-progress">
       <div class="submit-progress-label" id="submit-progress-label">0 of 5 required picks done</div>
       <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
     </div>
-    <button class="btn-lock" id="btn-lock" onclick="lockPicks()" disabled>
-      🔒 Lock Picks
-    </button>
+    <button class="btn-lock" id="btn-lock" onclick="lockPicks()" disabled>🔒 Lock Picks</button>
   </div>
+</div>
 
-</div><!-- /page-picks -->
-
-<!-- ======================================================== LEADERBOARD PAGE -->
+<!-- LEADERBOARD PAGE -->
 <div class="page" id="page-leaderboard">
   <div class="content" style="padding-top:28px">
-
     <div class="sec-header">
-      <span class="sec-title">2025 Season Standings</span>
+      <span class="sec-title">2026 Season Standings</span>
       <div class="sec-line"></div>
-      <span class="sec-badge sb-accent">After Round 4</span>
+      <span class="sec-badge sb-accent" id="lb-round-badge">Live</span>
     </div>
-
     <div class="lb-card" id="lb-global"></div>
 
     <div class="sec-header" style="margin-top:32px">
-      <span class="sec-title">Last Race · Bahrain GP</span>
+      <span class="sec-title">F1 Driver Standings</span>
       <div class="sec-line"></div>
-      <span class="sec-badge sb-green">Completed</span>
+      <span class="api-dot" id="standings-api-dot">Live</span>
     </div>
-
-    <div class="lb-card" id="lb-last-race"></div>
-
-    <!-- Worst Pick of the Week -->
-    <div class="sec-header" style="margin-top:32px">
-      <span class="sec-title">💩 Worst Pick</span>
-      <div class="sec-line"></div>
-      <span class="sec-badge" style="background:rgba(255,45,45,.1);color:var(--red-flag);border:1px solid rgba(255,45,45,.25)">Round 4</span>
-    </div>
-
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-      <div style="font-size:36px">🤦</div>
+    <div class="standings-grid">
       <div>
-        <div style="font-size:16px;font-weight:700">SpeedDemon_99 <span class="worst-badge">🐔 Shocker Pick</span></div>
-        <div style="font-size:13px;color:var(--text2);margin-top:3px">Picked <strong>Stroll P1</strong> + <strong>No retirements</strong> — finished last & 3 DNFs. Absolute chaos. −0 pts but the shame is eternal.</div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:8px">Drivers</div>
+        <div class="lb-card" id="f1-driver-standings"></div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:8px">Constructors</div>
+        <div class="lb-card" id="f1-constructor-standings"></div>
       </div>
     </div>
-
   </div>
 </div>
 
-<!-- ======================================================== SCHEDULE PAGE -->
+<!-- SCHEDULE PAGE -->
 <div class="page" id="page-schedule">
   <div class="content" style="padding-top:28px">
     <div class="sec-header">
-      <span class="sec-title">2025 F1 Calendar</span>
+      <span class="sec-title">2026 F1 Calendar</span>
       <div class="sec-line"></div>
-      <span class="api-dot" style="font-size:11px;font-weight:600;color:var(--green)">Live</span>
+      <span class="api-dot" id="cal-api-dot">Live</span>
     </div>
-    <div class="sched-list" id="sched-list"></div>
+    <div class="sched-list" id="sched-list">
+      <div class="sched-loading">⏳ Loading calendar...</div>
+    </div>
   </div>
 </div>
 
-<!-- ======================================================== GROUPS PAGE -->
+<!-- GROUPS PAGE -->
 <div class="page" id="page-groups">
   <div class="content" style="padding-top:28px">
-
     <div id="groups-guest" style="display:none">
-      <div class="empty-state">
-        <div class="empty-icon">🏆</div>
-        <div class="empty-text">Sign in to create or join a private<br>group and battle your mates.</div>
+      <div style="text-align:center;padding:48px 20px;color:var(--text3)">
+        <div style="font-size:44px;margin-bottom:12px">🏆</div>
+        <div style="font-size:14px;line-height:1.6">Sign in to create or join a private<br>group and battle your mates.</div>
         <button class="btn-full" style="max-width:200px;margin:20px auto 0" onclick="openAuth()">Sign In</button>
       </div>
     </div>
-
     <div id="groups-member">
-      <div class="flex-between" style="margin-bottom:18px;flex-wrap:wrap;gap:10px">
-        <div class="sec-header" style="margin:0;flex:1">
-          <span class="sec-title">Your Groups</span>
-          <div class="sec-line"></div>
-        </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+        <div class="sec-header" style="margin:0;flex:1"><span class="sec-title">Your Groups</span><div class="sec-line"></div></div>
         <div style="display:flex;gap:8px">
           <button class="btn-outline" onclick="toggleJoin()">Join Group</button>
           <button class="btn-signin" onclick="toggleCreate()">+ Create</button>
         </div>
       </div>
-
-      <!-- Create group panel -->
       <div id="create-panel" style="display:none;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:18px;margin-bottom:18px">
         <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px">New Group</div>
-        <div class="form-group">
-          <label class="form-label">Group Name</label>
-          <input class="form-input" id="grp-name" placeholder="e.g. Paddock Club Legends" type="text">
-        </div>
-        <div style="display:flex;gap:8px;margin-top:4px">
-          <button class="btn-signin" onclick="doCreate()">Create</button>
-          <button class="btn-outline" onclick="toggleCreate()">Cancel</button>
-        </div>
+        <div class="form-group"><label class="form-label">Group Name</label><input class="form-input" id="grp-name" placeholder="e.g. Paddock Club Legends" type="text"></div>
+        <div style="display:flex;gap:8px;margin-top:4px"><button class="btn-signin" onclick="doCreate()">Create</button><button class="btn-outline" onclick="toggleCreate()">Cancel</button></div>
       </div>
-
-      <!-- Join group panel -->
       <div id="join-panel" style="display:none;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:18px;margin-bottom:18px">
         <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px">Join with Code</div>
-        <div class="form-group">
-          <label class="form-label">Invite Code</label>
-          <input class="form-input" id="join-code" placeholder="e.g. CTG25" type="text" style="font-family:'Roboto Mono',monospace;font-size:18px;font-weight:600;letter-spacing:3px;text-transform:uppercase">
-        </div>
-        <div style="display:flex;gap:8px;margin-top:4px">
-          <button class="btn-signin" onclick="doJoin()">Join</button>
-          <button class="btn-outline" onclick="toggleJoin()">Cancel</button>
-        </div>
+        <div class="form-group"><label class="form-label">Invite Code</label><input class="form-input" id="join-code" placeholder="e.g. CTG26" type="text" style="font-family:'Roboto Mono',monospace;font-size:18px;font-weight:600;letter-spacing:3px;text-transform:uppercase"></div>
+        <div style="display:flex;gap:8px;margin-top:4px"><button class="btn-signin" onclick="doJoin()">Join</button><button class="btn-outline" onclick="toggleJoin()">Cancel</button></div>
       </div>
-
       <div class="groups-grid" id="groups-grid"></div>
     </div>
-
   </div>
 </div>
 
-<!-- ======================================================== PROFILE PAGE -->
+<!-- PROFILE PAGE -->
 <div class="page" id="page-profile">
   <div class="content" style="padding-top:28px">
-
     <div id="profile-guest" style="display:none">
-      <div class="empty-state">
-        <div class="empty-icon">👤</div>
-        <div class="empty-text">Sign in to manage your profile,<br>pick your team colours, and set your timezone.</div>
+      <div style="text-align:center;padding:48px 20px;color:var(--text3)">
+        <div style="font-size:44px;margin-bottom:12px">👤</div>
+        <div style="font-size:14px;line-height:1.6">Sign in to manage your profile.</div>
         <button class="btn-full" style="max-width:200px;margin:20px auto 0" onclick="openAuth()">Sign In</button>
       </div>
     </div>
-
     <div id="profile-member">
-      <div class="sec-header">
-        <span class="sec-title">Your Profile</span>
-        <div class="sec-line"></div>
-      </div>
-
+      <div class="sec-header"><span class="sec-title">Your Profile</span><div class="sec-line"></div></div>
       <div class="profile-grid">
-        <!-- Team colour picker -->
         <div class="setting-card">
           <div class="setting-title">🎨 Favourite Team</div>
           <div class="team-grid" id="team-grid"></div>
           <div style="font-size:11px;color:var(--text3);margin-top:10px">Your team choice changes the app's colour theme.</div>
         </div>
-
-        <!-- Timezone -->
         <div class="setting-card">
           <div class="setting-title">🌍 Timezone</div>
           <select class="tz-select" id="tz-select" onchange="saveTz(this.value)">
@@ -1031,55 +532,31 @@ nav {
             <option value="America/New_York">🇺🇸 New York (ET)</option>
             <option value="America/Chicago">🇺🇸 Chicago (CT)</option>
             <option value="America/Los_Angeles">🇺🇸 Los Angeles (PT)</option>
-            <option value="America/Toronto">🇨🇦 Toronto (ET)</option>
             <option value="Australia/Sydney">🇦🇺 Sydney (AEST)</option>
             <option value="Asia/Tokyo">🇯🇵 Tokyo (JST)</option>
             <option value="Asia/Singapore">🇸🇬 Singapore (SGT)</option>
           </select>
-          <div style="font-size:11px;color:var(--text3);margin-top:10px">Race times & lock times display in your local timezone.</div>
         </div>
-
-        <!-- Joker status -->
         <div class="setting-card">
           <div class="setting-title">🃏 Joker Status</div>
           <div style="font-family:'Roboto Mono',monospace;font-size:36px;font-weight:700;color:var(--gold)" id="joker-count-display">3</div>
           <div style="font-size:12px;color:var(--text2);margin-top:4px">Wildcards remaining this season</div>
           <div style="margin-top:12px;display:flex;gap:4px" id="joker-pips"></div>
         </div>
-
-        <!-- Season stats -->
         <div class="setting-card">
           <div class="setting-title">📊 Your Season</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-            <div>
-              <div style="font-family:'Roboto Mono',monospace;font-size:28px;font-weight:700;color:var(--accent)">0</div>
-              <div style="font-size:11px;color:var(--text3)">Total Points</div>
-            </div>
-            <div>
-              <div style="font-family:'Roboto Mono',monospace;font-size:28px;font-weight:700;color:var(--text2)">—</div>
-              <div style="font-size:11px;color:var(--text3)">Global Rank</div>
-            </div>
-            <div>
-              <div style="font-family:'Roboto Mono',monospace;font-size:28px;font-weight:700;color:var(--text2)">0</div>
-              <div style="font-size:11px;color:var(--text3)">Races Picked</div>
-            </div>
-            <div>
-              <div style="font-family:'Roboto Mono',monospace;font-size:28px;font-weight:700;color:var(--text2)">0%</div>
-              <div style="font-size:11px;color:var(--text3)">Exact Pick Rate</div>
-            </div>
+            <div><div style="font-family:'Roboto Mono',monospace;font-size:28px;font-weight:700;color:var(--accent)" id="profile-pts">0</div><div style="font-size:11px;color:var(--text3)">Total Points</div></div>
+            <div><div style="font-family:'Roboto Mono',monospace;font-size:28px;font-weight:700;color:var(--text2)" id="profile-rank">—</div><div style="font-size:11px;color:var(--text3)">Global Rank</div></div>
           </div>
         </div>
       </div>
-
-      <div style="margin-top:14px">
-        <button class="btn-outline" onclick="signOut()" style="color:var(--red-flag);border-color:rgba(255,45,45,.3)">Sign Out</button>
-      </div>
+      <div style="margin-top:14px"><button class="btn-outline" onclick="signOut()" style="color:var(--red-flag);border-color:rgba(255,45,45,.3)">Sign Out</button></div>
     </div>
-
   </div>
 </div>
 
-<!-- ======================================================== MOBILE BOTTOM NAV -->
+<!-- MOBILE NAV -->
 <div class="bottom-nav">
   <button class="bnav-btn active" id="bnav-picks" onclick="showPage('picks')"><span class="bnav-icon">🏁</span>Picks</button>
   <button class="bnav-btn" id="bnav-leaderboard" onclick="showPage('leaderboard')"><span class="bnav-icon">🏆</span>Stands</button>
@@ -1089,228 +566,35 @@ nav {
   <button class="bnav-btn" id="bnav-faq" onclick="showPage('faq')"><span class="bnav-icon">❓</span>FAQ</button>
 </div>
 
-<!-- ======================================================== FAQ PAGE -->
+<!-- FAQ PAGE -->
 <div class="page" id="page-faq">
   <div class="content" style="padding-top:28px;max-width:720px">
-
-    <!-- Hero -->
     <div style="margin-bottom:32px">
       <div class="race-eyebrow" style="margin-bottom:8px">Everything you need to know</div>
-      <div style="font-size:clamp(28px,6vw,44px);font-weight:900;text-transform:uppercase;line-height:1;letter-spacing:-0.5px">
-        How to play<br><span style="color:var(--accent)">Call The Grid</span>
-      </div>
-      <div style="font-size:14px;color:var(--text2);margin-top:10px;line-height:1.6;max-width:500px">
-        No experience needed. If you watch F1, you already know enough to play. Here's everything explained simply.
-      </div>
+      <div style="font-size:clamp(28px,6vw,44px);font-weight:900;text-transform:uppercase;line-height:1;letter-spacing:-0.5px">How to play<br><span style="color:var(--accent)">Call The Grid</span></div>
     </div>
-
-    <!-- ── THE BASICS ── -->
     <div class="sec-header"><span class="sec-title">The Basics</span><div class="sec-line"></div></div>
-
     <div class="faq-list">
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>What is Call The Grid?</span><span class="faq-arrow">▾</span>
-        </button>
-        <div class="faq-a">
-          <p>Call The Grid is a free prediction game for Formula 1 fans. Before each race weekend, you predict who you think will finish where — and you earn points based on how accurate you are. It's you and your mates, competing across a full season. No money, no complicated rules — just F1 knowledge and a bit of luck.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>Do I need to know a lot about F1 to play?</span><span class="faq-arrow">▾</span>
-        </button>
-        <div class="faq-a">
-          <p>Not at all. If you watch the races and recognise the drivers' names, you have everything you need. More casual fans often do surprisingly well — sometimes a lucky guess beats years of expert knowledge. That's what makes it fun.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>Is it free?</span><span class="faq-arrow">▾</span>
-        </button>
-        <div class="faq-a">
-          <p>Yes, completely free. There's no subscription, no premium tier, no ads. It's built to be played with friends, not to make money.</p>
-        </div>
-      </div>
-
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>What is Call The Grid?</span><span class="faq-arrow">▾</span></button><div class="faq-a"><p>Call The Grid is a free F1 prediction game. Before each race weekend, predict who you think will finish where — earn points based on accuracy. Compete against friends across a full season. No money, just F1 knowledge and luck.</p></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>Is it free?</span><span class="faq-arrow">▾</span></button><div class="faq-a"><p>Yes, completely free. No subscription, no premium tier, no ads.</p></div></div>
     </div>
-
-    <!-- ── MAKING PICKS ── -->
-    <div class="sec-header" style="margin-top:32px"><span class="sec-title">Making Your Picks</span><div class="sec-line"></div></div>
-
-    <div class="faq-list">
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>What do I actually predict each race?</span><span class="faq-arrow">▾</span>
-        </button>
-        <div class="faq-a">
-          <p>Each race you make six predictions:</p>
-          <ul class="faq-list-inner">
-            <li><strong>🏎️ Pole Position</strong> — Who gets the fastest lap in qualifying (P1)</li>
-            <li><strong>P2 Qualifying</strong> — Who qualifies second</li>
-            <li><strong>P3 Qualifying</strong> — Who qualifies third</li>
-            <li><strong>🏁 Top 10 Race Finishers</strong> — Drag them into your predicted finishing order</li>
-            <li><strong>⚡ Fastest Lap</strong> — Who sets the single fastest lap during the race</li>
-            <li><strong>💀 First Retirement</strong> — Who is the first driver to drop out of the race (DNF)</li>
-          </ul>
-          <p style="margin-top:10px">You can also play your <strong>🃏 Joker</strong> to double one driver's points — more on that below.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>When do my picks lock?</span><span class="faq-arrow">▾</span>
-        </button>
-        <div class="faq-a">
-          <p>Your picks lock at the start of qualifying — not the race. This is important! Qualifying usually happens on Saturday. Once qualifying begins, you can no longer change your picks. The app shows you a live countdown so you always know how long you have left.</p>
-          <p style="margin-top:8px">⚠️ <strong>Don't leave it too late.</strong> Get your picks in before Saturday morning to be safe.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>How does the Top 10 drag list work?</span><span class="faq-arrow">▾</span>
-        </button>
-        <div class="faq-a">
-          <p>You'll see a list of 10 drivers. Simply drag and drop them into the order you think they'll finish the race. On mobile, press and hold a driver, then drag them up or down. On desktop, click and drag. The position numbers update automatically as you move drivers around.</p>
-          <p style="margin-top:8px">You don't need to get all 10 right — every correct driver earns you points, and an <em>exact</em> position earns you more.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>Can I change my picks after submitting?</span><span class="faq-arrow">▾</span>
-        </button>
-        <div class="faq-a">
-          <p>Yes — right up until qualifying starts. After you lock your picks, you'll see an <strong>Edit Picks</strong> button on the confirmation screen. You can change as many times as you like before the deadline. Once qualifying begins, they're locked for good.</p>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ── SCORING ── -->
     <div class="sec-header" style="margin-top:32px"><span class="sec-title">Scoring</span><div class="sec-line"></div></div>
-
     <div class="faq-list">
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>How are points calculated?</span><span class="faq-arrow">▾</span>
-        </button>
-        <div class="faq-a">
-          <div class="scoring-table">
-            <div class="score-row"><span class="score-icon">🎯</span><span class="score-desc">Driver finishes in your exact predicted position</span><span class="score-pts">+10 pts</span></div>
-            <div class="score-row"><span class="score-icon">📍</span><span class="score-desc">Driver is in your Top 10 but wrong position</span><span class="score-pts">+5 pts</span></div>
-            <div class="score-row"><span class="score-icon">🏎️</span><span class="score-desc">Correct Pole Position pick</span><span class="score-pts">+5 pts</span></div>
-            <div class="score-row"><span class="score-icon">2️⃣</span><span class="score-desc">Correct P2 Qualifying pick</span><span class="score-pts">+3 pts</span></div>
-            <div class="score-row"><span class="score-icon">3️⃣</span><span class="score-desc">Correct P3 Qualifying pick</span><span class="score-pts">+1 pt</span></div>
-            <div class="score-row"><span class="score-icon">⚡</span><span class="score-desc">Correct Fastest Lap pick</span><span class="score-pts">+5 pts</span></div>
-            <div class="score-row"><span class="score-icon">💀</span><span class="score-desc">Correct First Retirement pick</span><span class="score-pts">+5 pts</span></div>
-            <div class="score-row score-row-gold"><span class="score-icon">🃏</span><span class="score-desc">Joker Wildcard — doubles that driver's race points</span><span class="score-pts" style="color:var(--gold)">×2</span></div>
-          </div>
-          <p style="margin-top:12px;font-size:13px;color:var(--text2)">Example: You pick Verstappen P1 and he wins → <strong>+10 pts</strong>. You also picked him as your Joker → <strong>+20 pts total</strong> just for that one pick.</p>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>How are points calculated?</span><span class="faq-arrow">▾</span></button><div class="faq-a">
+        <div style="display:flex;flex-direction:column;gap:0;border-radius:var(--r);overflow:hidden;border:1px solid var(--border)">
+          <div style="display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;background:var(--bg4)"><span>🎯</span><span style="color:var(--text2)">Exact predicted position</span><span style="font-family:'Roboto Mono',monospace;font-weight:700;color:var(--accent)">+10</span></div>
+          <div style="display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px"><span>📍</span><span style="color:var(--text2)">In Top 10, wrong position</span><span style="font-family:'Roboto Mono',monospace;font-weight:700;color:var(--accent)">+5</span></div>
+          <div style="display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;background:var(--bg4)"><span>🏎️</span><span style="color:var(--text2)">Correct Pole Position</span><span style="font-family:'Roboto Mono',monospace;font-weight:700;color:var(--accent)">+5</span></div>
+          <div style="display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px"><span>⚡</span><span style="color:var(--text2)">Correct Fastest Lap</span><span style="font-family:'Roboto Mono',monospace;font-weight:700;color:var(--accent)">+5</span></div>
+          <div style="display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:10px;padding:10px 14px;font-size:13px;background:var(--bg4)"><span>🃏</span><span style="color:var(--text2)">Joker — doubles driver's race points</span><span style="font-family:'Roboto Mono',monospace;font-weight:700;color:var(--gold)">×2</span></div>
         </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>What if a driver I picked retires from the race?</span><span class="faq-arrow">▾</span>
-        </button>
-        <div class="faq-a">
-          <p>If a driver you picked in your Top 10 retires during the race, they simply score 0 points for that pick — they don't count as being "in the top 10". No penalty, you just miss out on those points. This is also why the First Retirement pick is its own separate question worth +5 pts — turning bad luck into a points opportunity.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>When do I find out my score?</span><span class="faq-arrow">▾</span>
-        </button>
-        <div class="faq-a">
-          <p>Scores update automatically after the race using live results from the F1 API. Usually within a few minutes of the chequered flag. You'll be able to see the full leaderboard breakdown showing who got what right — and who had the most embarrassing picks 😄</p>
-        </div>
-      </div>
-
+      </div></div>
     </div>
-
-    <!-- ── JOKER ── -->
-    <div class="sec-header" style="margin-top:32px"><span class="sec-title">🃏 Joker Wildcard</span><div class="sec-line"></div></div>
-
-    <div class="faq-list">
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>What is the Joker Wildcard?</span><span class="faq-arrow">▾</span>
-        </button>
-        <div class="faq-a">
-          <p>The Joker is your secret weapon. Each season you get <strong>3 Jokers</strong> to use across 24 races — use them wisely. When you play a Joker on a driver, whatever race points they earn get <strong>doubled</strong>.</p>
-          <p style="margin-top:8px">For example: if you Joker Norris and he finishes P1 (exact finish = +10 pts), you get +20 pts instead. If he also sets Fastest Lap (+5 pts), that doubles too for a total of +30 pts from one driver.</p>
-          <p style="margin-top:8px">⚠️ The risk: if your Joker driver crashes out, you've wasted one of your 3 seasonal wildcards.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>When should I use my Joker?</span><span class="faq-arrow">▾</span>
-        </button>
-        <div class="faq-a">
-          <p>There's no right answer — that's what makes it fun. Some strategies:</p>
-          <ul class="faq-list-inner">
-            <li><strong>Street circuits</strong> (Monaco, Baku, Singapore) — high chance of safety cars and DNFs, but if your driver survives, big points</li>
-            <li><strong>Dominant driver at their home race</strong> — Verstappen in the Netherlands, Leclerc in Monaco</li>
-            <li><strong>Late season</strong> — save it for when you need a big swing to catch the leader</li>
-            <li><strong>Favourite driver</strong> — sometimes you just back who you love 🤷</li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ── GROUPS ── -->
-    <div class="sec-header" style="margin-top:32px"><span class="sec-title">Groups & Friends</span><div class="sec-line"></div></div>
-
-    <div class="faq-list">
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>How do I play with my friends?</span><span class="faq-arrow">▾</span>
-        </button>
-        <div class="faq-a">
-          <p>Create a private group in the Groups tab. You'll get a short invite code — share it with your mates. They sign up, enter the code, and you're all in the same group. You'll see a private leaderboard showing just your group's standings alongside the global one.</p>
-          <p style="margin-top:8px">One person in your group should create it and share the code via WhatsApp or wherever you already chat.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>Can I be in more than one group?</span><span class="faq-arrow">▾</span>
-        </button>
-        <div class="faq-a">
-          <p>Yes. You might have one group for work colleagues and another for your close friends. Your picks are the same for both — you don't pick separately for each group. The groups just give you different leaderboards to compare against.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>What is the 💩 Worst Pick of the Week?</span><span class="faq-arrow">▾</span>
-        </button>
-        <div class="faq-a">
-          <p>After each race, the Standings page shows a special badge for whoever had the most catastrophically wrong prediction that weekend. It's entirely for bragging rights (well, shame rights). There's no points penalty — just eternal group chat humiliation. The algorithm looks at picks that were the furthest from the actual result — like predicting someone to finish P1 when they finished P19 or retired.</p>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- bottom padding -->
     <div style="height:48px"></div>
-
   </div>
 </div>
 
-<!-- ======================================================== AUTH MODAL -->
+<!-- AUTH MODAL -->
 <div class="overlay hidden" id="overlay-auth">
   <div class="modal">
     <button class="modal-close" onclick="closeAuth()">✕</button>
@@ -1324,14 +608,8 @@ nav {
       <label class="form-label">Display Name</label>
       <input class="form-input" id="auth-name" placeholder="e.g. Hamilton_Fan" type="text">
     </div>
-    <div class="form-group">
-      <label class="form-label">Email</label>
-      <input class="form-input" id="auth-email" placeholder="you@example.com" type="email">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Password</label>
-      <input class="form-input" id="auth-pass" placeholder="••••••••" type="password">
-    </div>
+    <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="auth-email" placeholder="you@example.com" type="email"></div>
+    <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="auth-pass" placeholder="••••••••" type="password"></div>
     <button class="btn-full" onclick="doAuth()">Continue →</button>
     <div style="display:flex;align-items:center;gap:10px;margin:14px 0">
       <div style="flex:1;height:1px;background:var(--border)"></div>
@@ -1342,19 +620,13 @@ nav {
       <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.826.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/></svg>
       Continue with Google
     </button>
-    <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:12px">
-      🔒 Secured by Firebase · callthegrid.com
-    </div>
+    <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:12px">🔒 Secured by Firebase · callthegrid.com</div>
   </div>
 </div>
 
-<!-- ======================================================== TOAST -->
 <div class="toast" id="toast"></div>
 
 <script type="module">
-/* ================================================================
-   FIREBASE SETUP
-   ================================================================ */
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword,
          GoogleAuthProvider, signInWithPopup, signOut as fbSignOut, updateProfile
@@ -1377,147 +649,208 @@ const auth = getAuth(app);
 const db   = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
-// Current race ID — update each race week
-const RACE_ID = 'r2025_05';
-const SEASON  = '2025';
+const SEASON  = '2026';
+let RACE_ID   = 'r2026_01'; // updated once API loads
 
 /* ================================================================
-   DATA
+   2026 FULL DRIVER GRID (22 drivers, 11 teams)
    ================================================================ */
 const DRIVERS = [
-  {abbr:'VER',name:'Max Verstappen',    team:'Red Bull',    flag:'🇳🇱', teamId:'red-bull'},
-  {abbr:'PER',name:'Sergio Pérez',      team:'Red Bull',    flag:'🇲🇽', teamId:'red-bull'},
-  {abbr:'HAM',name:'Lewis Hamilton',    team:'Ferrari',     flag:'🇬🇧', teamId:'ferrari'},
-  {abbr:'LEC',name:'Charles Leclerc',   team:'Ferrari',     flag:'🇲🇨', teamId:'ferrari'},
-  {abbr:'SAI',name:'Carlos Sainz',      team:'Williams',    flag:'🇪🇸', teamId:'williams'},
-  {abbr:'ALB',name:'Alexander Albon',   team:'Williams',    flag:'🇹🇭', teamId:'williams'},
-  {abbr:'RUS',name:'George Russell',    team:'Mercedes',    flag:'🇬🇧', teamId:'mercedes'},
-  {abbr:'ANT',name:'Kimi Antonelli',    team:'Mercedes',    flag:'🇮🇹', teamId:'mercedes'},
-  {abbr:'NOR',name:'Lando Norris',      team:'McLaren',     flag:'🇬🇧', teamId:'mclaren'},
-  {abbr:'PIA',name:'Oscar Piastri',     team:'McLaren',     flag:'🇦🇺', teamId:'mclaren'},
-  {abbr:'ALO',name:'Fernando Alonso',   team:'Aston Martin',flag:'🇪🇸', teamId:'aston-martin'},
-  {abbr:'STR',name:'Lance Stroll',      team:'Aston Martin',flag:'🇨🇦', teamId:'aston-martin'},
-  {abbr:'HUL',name:'Nico Hülkenberg',   team:'Sauber',      flag:'🇩🇪', teamId:'sauber'},
-  {abbr:'BOR',name:'Gabriel Bortoleto', team:'Sauber',      flag:'🇧🇷', teamId:'sauber'},
-  {abbr:'GAS',name:'Pierre Gasly',      team:'Alpine',      flag:'🇫🇷', teamId:'alpine'},
-  {abbr:'DOO',name:'Jack Doohan',       team:'Alpine',      flag:'🇦🇺', teamId:'alpine'},
-  {abbr:'TSU',name:'Yuki Tsunoda',      team:'RB',          flag:'🇯🇵', teamId:'rb'},
-  {abbr:'HAD',name:'Isack Hadjar',      team:'RB',          flag:'🇫🇷', teamId:'rb'},
-  {abbr:'OCO',name:'Esteban Ocon',      team:'Haas',        flag:'🇫🇷', teamId:'haas'},
-  {abbr:'BEA',name:'Oliver Bearman',    team:'Haas',        flag:'🇬🇧', teamId:'haas'},
+  {abbr:'NOR',name:'Lando Norris',      team:'McLaren',      flag:'🇬🇧', teamId:'mclaren'},
+  {abbr:'PIA',name:'Oscar Piastri',     team:'McLaren',      flag:'🇦🇺', teamId:'mclaren'},
+  {abbr:'RUS',name:'George Russell',    team:'Mercedes',     flag:'🇬🇧', teamId:'mercedes'},
+  {abbr:'ANT',name:'Kimi Antonelli',    team:'Mercedes',     flag:'🇮🇹', teamId:'mercedes'},
+  {abbr:'VER',name:'Max Verstappen',    team:'Red Bull',     flag:'🇳🇱', teamId:'red-bull'},
+  {abbr:'HAD',name:'Isack Hadjar',      team:'Red Bull',     flag:'🇫🇷', teamId:'red-bull'},
+  {abbr:'HAM',name:'Lewis Hamilton',    team:'Ferrari',      flag:'🇬🇧', teamId:'ferrari'},
+  {abbr:'LEC',name:'Charles Leclerc',   team:'Ferrari',      flag:'🇲🇨', teamId:'ferrari'},
+  {abbr:'SAI',name:'Carlos Sainz',      team:'Williams',     flag:'🇪🇸', teamId:'williams'},
+  {abbr:'ALB',name:'Alexander Albon',   team:'Williams',     flag:'🇹🇭', teamId:'williams'},
+  {abbr:'ALO',name:'Fernando Alonso',   team:'Aston Martin', flag:'🇪🇸', teamId:'aston-martin'},
+  {abbr:'STR',name:'Lance Stroll',      team:'Aston Martin', flag:'🇨🇦', teamId:'aston-martin'},
+  {abbr:'GAS',name:'Pierre Gasly',      team:'Alpine',       flag:'🇫🇷', teamId:'alpine'},
+  {abbr:'COL',name:'Franco Colapinto',  team:'Alpine',       flag:'🇦🇷', teamId:'alpine'},
+  {abbr:'LAW',name:'Liam Lawson',       team:'Racing Bulls', flag:'🇳🇿', teamId:'rb'},
+  {abbr:'LIN',name:'Arvid Lindblad',    team:'Racing Bulls', flag:'🇸🇪', teamId:'rb'},
+  {abbr:'OCO',name:'Esteban Ocon',      team:'Haas',         flag:'🇫🇷', teamId:'haas'},
+  {abbr:'BEA',name:'Oliver Bearman',    team:'Haas',         flag:'🇬🇧', teamId:'haas'},
+  {abbr:'HUL',name:'Nico Hülkenberg',   team:'Audi',         flag:'🇩🇪', teamId:'audi'},
+  {abbr:'BOR',name:'Gabriel Bortoleto', team:'Audi',         flag:'🇧🇷', teamId:'audi'},
+  {abbr:'BOT',name:'Valtteri Bottas',   team:'Cadillac',     flag:'🇫🇮', teamId:'cadillac'},
+  {abbr:'PER',name:'Sergio Pérez',      team:'Cadillac',     flag:'🇲🇽', teamId:'cadillac'},
 ];
 
 const TEAMS = [
-  {id:'red-bull',    name:'Red Bull',     color:'#3671C6'},
-  {id:'ferrari',     name:'Ferrari',      color:'#E8002D'},
-  {id:'mclaren',     name:'McLaren',      color:'#FF8000'},
-  {id:'mercedes',    name:'Mercedes',     color:'#27F4D2'},
-  {id:'aston-martin',name:'Aston Martin', color:'#229971'},
-  {id:'alpine',      name:'Alpine',       color:'#0093CC'},
-  {id:'williams',    name:'Williams',     color:'#64C4FF'},
-  {id:'rb',          name:'RB',           color:'#6692FF'},
-  {id:'haas',        name:'Haas',         color:'#B6BABD'},
-  {id:'sauber',      name:'Sauber',       color:'#52E252'},
-];
-
-const SCHEDULE = [
-  {r:1,  name:'Australian GP',   circuit:'Albert Park',                   flag:'🇦🇺', date:'Mar 16',  status:'done'},
-  {r:2,  name:'Chinese GP',      circuit:'Shanghai International',         flag:'🇨🇳', date:'Mar 23',  status:'done'},
-  {r:3,  name:'Japanese GP',     circuit:'Suzuka Circuit',                 flag:'🇯🇵', date:'Apr 6',   status:'done'},
-  {r:4,  name:'Bahrain GP',      circuit:'Bahrain International Circuit',  flag:'🇧🇭', date:'Apr 13',  status:'done'},
-  {r:5,  name:'Monaco GP',       circuit:'Circuit de Monaco',              flag:'🇲🇨', date:'May 25',  status:'next'},
-  {r:6,  name:'Spanish GP',      circuit:'Circuit de Barcelona-Catalunya', flag:'🇪🇸', date:'Jun 1',   status:'future'},
-  {r:7,  name:'Canadian GP',     circuit:'Circuit Gilles-Villeneuve',      flag:'🇨🇦', date:'Jun 15',  status:'future'},
-  {r:8,  name:'Austrian GP',     circuit:'Red Bull Ring',                  flag:'🇦🇹', date:'Jun 29',  status:'future'},
-  {r:9,  name:'British GP',      circuit:'Silverstone Circuit',            flag:'🇬🇧', date:'Jul 6',   status:'future'},
-  {r:10, name:'Belgian GP',      circuit:'Circuit de Spa-Francorchamps',   flag:'🇧🇪', date:'Jul 27',  status:'future'},
-  {r:11, name:'Hungarian GP',    circuit:'Hungaroring',                    flag:'🇭🇺', date:'Aug 3',   status:'future'},
-  {r:12, name:'Dutch GP',        circuit:'Circuit Zandvoort',              flag:'🇳🇱', date:'Aug 31',  status:'future'},
-  {r:13, name:'Italian GP',      circuit:'Autodromo Nazionale Monza',      flag:'🇮🇹', date:'Sep 7',   status:'future'},
-  {r:14, name:'Azerbaijan GP',   circuit:'Baku City Circuit',              flag:'🇦🇿', date:'Sep 21',  status:'future'},
-  {r:15, name:'Singapore GP',    circuit:'Marina Bay Street Circuit',      flag:'🇸🇬', date:'Oct 5',   status:'future'},
-  {r:16, name:'United States GP',circuit:'Circuit of The Americas',        flag:'🇺🇸', date:'Oct 19',  status:'future'},
-  {r:17, name:'Mexico City GP',  circuit:'Autodromo Hermanos Rodriguez',   flag:'🇲🇽', date:'Oct 26',  status:'future'},
-  {r:18, name:'São Paulo GP',    circuit:'Autodromo Jose Carlos Pace',     flag:'🇧🇷', date:'Nov 9',   status:'future'},
-  {r:19, name:'Las Vegas GP',    circuit:'Las Vegas Street Circuit',        flag:'🇺🇸', date:'Nov 22',  status:'future'},
-  {r:20, name:'Qatar GP',        circuit:'Losail International Circuit',   flag:'🇶🇦', date:'Nov 30',  status:'future'},
-  {r:21, name:'Abu Dhabi GP',    circuit:'Yas Marina Circuit',             flag:'🇦🇪', date:'Dec 7',   status:'future'},
-];
-
-const LB_DATA = [
-  {name:'SpeedDemon_99', pts:412, last:89, change:2,  streak:3},
-  {name:'Schumi_Fan',    pts:388, last:72, change:1,  streak:0},
-  {name:'Paddock_Ace',   pts:371, last:85, change:-1, streak:2},
-  {name:'DRS_Queen',     pts:359, last:91, change:3,  streak:1},
-  {name:'RedBull_Max',   pts:344, last:60, change:-2, streak:0},
-  {name:'F1_Oracle',     pts:328, last:55, change:0,  streak:0},
-  {name:'YOU',           pts:0,   last:0,  change:0,  streak:0, isMe:true},
-];
-
-const LAST_RACE = [
-  {pos:1, driver:'Max Verstappen', team:'Red Bull', pts:25},
-  {pos:2, driver:'Lando Norris',   team:'McLaren',  pts:18},
-  {pos:3, driver:'Charles Leclerc',team:'Ferrari',  pts:15},
-  {pos:4, driver:'Oscar Piastri',  team:'McLaren',  pts:12},
-  {pos:5, driver:'George Russell', team:'Mercedes', pts:10},
+  {id:'mclaren',      name:'McLaren',      color:'#FF8000'},
+  {id:'mercedes',     name:'Mercedes',     color:'#27F4D2'},
+  {id:'red-bull',     name:'Red Bull',     color:'#3671C6'},
+  {id:'ferrari',      name:'Ferrari',      color:'#E8002D'},
+  {id:'williams',     name:'Williams',     color:'#64C4FF'},
+  {id:'aston-martin', name:'Aston Martin', color:'#229971'},
+  {id:'alpine',       name:'Alpine',       color:'#0093CC'},
+  {id:'rb',           name:'Racing Bulls', color:'#6692FF'},
+  {id:'haas',         name:'Haas',         color:'#B6BABD'},
+  {id:'audi',         name:'Audi',         color:'#52E252'},
+  {id:'cadillac',     name:'Cadillac',     color:'#C8A84B'},
 ];
 
 /* ================================================================
    STATE
    ================================================================ */
-let currentUser = null;
-let userProfile = null;
+let currentUser = null, userProfile = null;
 let picks = {pole:'', q2:'', q3:'', fl:'', dnf:''};
-let top10Order = [...DRIVERS.slice(0,10).map(d=>d.abbr)];
+let top10Order = [];       // abbr array, max 10
 let jokerDriver = '';
 let jokersLeft = 3;
 let isLocked = false;
 let favTeam = localStorage.getItem('ctg-team') || 'red-bull';
 let groups = [];
 let lbUnsub = null;
+let nextRaceDate = null;
 
 /* ================================================================
-   INIT
+   JOLPICA API — fetch live race data
    ================================================================ */
-function init() {
-  applyTeam(favTeam);
-  populateSelects();
-  buildTop10List();
-  renderSchedule();
-  renderTeamGrid();
-  renderJokerPips();
-  startCountdown();
-  updateProgress();
-  renderLeaderboard(); // renders placeholder until Firebase loads
+const JOLPICA = 'https://api.jolpi.ca/ergast/f1';
 
-  // Firebase auth listener — fires whenever login state changes
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      currentUser = user;
-      await loadUserProfile(user);
-      await loadUserPicks();
-      loadLeaderboard();
-      loadUserGroups();
-    } else {
-      currentUser = null;
-      userProfile = null;
-      picks = {pole:'', q2:'', q3:'', fl:'', dnf:''};
-      top10Order = [...DRIVERS.slice(0,10).map(d=>d.abbr)];
-      jokerDriver = '';
-      jokersLeft = 3;
-      isLocked = false;
-      buildTop10List();
-      renderLeaderboard();
-      groups = [];
-      renderGroups();
+async function fetchNextRace() {
+  try {
+    const res = await fetch(`${JOLPICA}/${SEASON}/races.json?limit=30`);
+    const data = await res.json();
+    const races = data?.MRData?.RaceTable?.Races || [];
+    const now = new Date();
+    const next = races.find(r => new Date(r.date + 'T' + (r.time||'12:00:00Z')) > now)
+                 || races[races.length - 1];
+    if (next) {
+      const raceDate = new Date(next.date + 'T' + (next.time || '12:00:00Z'));
+      const qualiDate = next.Qualifying
+        ? new Date(next.Qualifying.date + 'T' + (next.Qualifying.time || '12:00:00Z'))
+        : new Date(raceDate.getTime() - 86400000);
+
+      nextRaceDate = qualiDate;
+      RACE_ID = `r${SEASON}_${String(next.round).padStart(2,'0')}`;
+
+      // Update banner
+      document.getElementById('race-eyebrow').textContent =
+        `🏁 ${SEASON} Season · Round ${next.round} of ${races.length}`;
+      document.getElementById('race-title').textContent =
+        `${getFlagForCountry(next.Circuit?.Location?.country)} ${next.raceName.replace(' Grand Prix','')}`;
+      document.getElementById('race-subtitle').textContent =
+        `${next.Circuit?.circuitName} · ${next.Circuit?.Location?.locality}`;
+
+      const apiDot = document.getElementById('api-status');
+      apiDot.textContent = 'Live Data';
+      apiDot.className = 'api-dot';
+
+      startCountdown(qualiDate);
+
+      // Mark schedule items
+      renderScheduleFromAPI(races);
     }
-    updateAuthUI();
-    checkGroupsAuth();
-  });
+  } catch(e) {
+    console.error('fetchNextRace:', e);
+    document.getElementById('api-status').textContent = 'Offline';
+    document.getElementById('api-status').className = 'chip';
+    // Fallback banner
+    document.getElementById('race-eyebrow').textContent = '🏁 2026 Season';
+    document.getElementById('race-title').textContent = 'Australian GP';
+    document.getElementById('race-subtitle').textContent = 'Albert Park · Melbourne';
+  }
+}
+
+async function fetchDriverStandings() {
+  const el = document.getElementById('f1-driver-standings');
+  try {
+    const res = await fetch(`${JOLPICA}/${SEASON}/driverStandings.json`);
+    const data = await res.json();
+    const standings = data?.MRData?.StandingsTable?.StandingsLists?.[0]?.DriverStandings || [];
+    if (!standings.length) { el.innerHTML = '<div style="padding:16px;text-align:center;color:var(--text3);font-size:13px">Season not started yet</div>'; return; }
+    el.innerHTML = standings.slice(0,10).map(s => {
+      const pos = parseInt(s.position);
+      const rClass = pos===1?'r1':pos===2?'r2':pos===3?'r3':'rn';
+      const rLabel = pos===1?'🥇':pos===2?'🥈':pos===3?'🥉':pos;
+      return `<div class="lb-row">
+        <div class="lb-rank ${rClass}">${rLabel}</div>
+        <div><div class="lb-name">${s.Driver.givenName} ${s.Driver.familyName}</div><div class="lb-meta">${s.Constructors?.[0]?.name||''}</div></div>
+        <div class="lb-score">${s.points}</div>
+        <div></div>
+      </div>`;
+    }).join('');
+    document.getElementById('standings-api-dot').className = 'api-dot';
+    document.getElementById('standings-api-dot').textContent = 'Live';
+  } catch(e) {
+    el.innerHTML = '<div style="padding:16px;text-align:center;color:var(--text3);font-size:13px">Could not load standings</div>';
+  }
+}
+
+async function fetchConstructorStandings() {
+  const el = document.getElementById('f1-constructor-standings');
+  try {
+    const res = await fetch(`${JOLPICA}/${SEASON}/constructorStandings.json`);
+    const data = await res.json();
+    const standings = data?.MRData?.StandingsTable?.StandingsLists?.[0]?.ConstructorStandings || [];
+    if (!standings.length) { el.innerHTML = '<div style="padding:16px;text-align:center;color:var(--text3);font-size:13px">Season not started yet</div>'; return; }
+    el.innerHTML = standings.map(s => {
+      const pos = parseInt(s.position);
+      const rClass = pos===1?'r1':pos===2?'r2':pos===3?'r3':'rn';
+      const rLabel = pos===1?'🥇':pos===2?'🥈':pos===3?'🥉':pos;
+      return `<div class="lb-row">
+        <div class="lb-rank ${rClass}">${rLabel}</div>
+        <div><div class="lb-name">${s.Constructor.name}</div></div>
+        <div class="lb-score">${s.points}</div>
+        <div></div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    el.innerHTML = '<div style="padding:16px;text-align:center;color:var(--text3);font-size:13px">Could not load standings</div>';
+  }
+}
+
+function renderScheduleFromAPI(races) {
+  const now = new Date();
+  const list = document.getElementById('sched-list');
+  list.innerHTML = races.map(r => {
+    const raceDate = new Date(r.date);
+    const isPast = raceDate < now;
+    const isNext = !isPast && races.filter(x => new Date(x.date) < now).length === races.indexOf(r);
+    const flag = getFlagForCountry(r.Circuit?.Location?.country);
+    const dateStr = raceDate.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+    const badge = isPast
+      ? `<span class="sec-badge sb-green">✓ Done</span>`
+      : isNext
+      ? `<span class="sec-badge sb-accent">▶ Next</span>`
+      : '';
+    return `<div class="sched-row ${isPast?'sched-done':isNext?'sched-next':''}">
+      <div class="sched-round">${r.round}</div>
+      <div>
+        <div class="sched-name">${flag} ${r.raceName}</div>
+        <div class="sched-circuit">${r.Circuit?.circuitName}</div>
+      </div>
+      <div>
+        <div class="sched-date">${dateStr}</div>
+        <div class="sched-status">${badge}</div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('cal-api-dot').className = 'api-dot';
+  document.getElementById('cal-api-dot').textContent = 'Live';
+}
+
+function getFlagForCountry(country) {
+  const flags = {
+    'Australia':'🇦🇺','China':'🇨🇳','Japan':'🇯🇵','Bahrain':'🇧🇭',
+    'Saudi Arabia':'🇸🇦','USA':'🇺🇸','Italy':'🇮🇹','Monaco':'🇲🇨',
+    'Spain':'🇪🇸','Canada':'🇨🇦','Austria':'🇦🇹','UK':'🇬🇧',
+    'Hungary':'🇭🇺','Belgium':'🇧🇪','Netherlands':'🇳🇱','Azerbaijan':'🇦🇿',
+    'Singapore':'🇸🇬','Mexico':'🇲🇽','Brazil':'🇧🇷','Qatar':'🇶🇦',
+    'UAE':'🇦🇪','United States':'🇺🇸','United Kingdom':'🇬🇧',
+    'Las Vegas':'🇺🇸','Miami':'🇺🇸',
+  };
+  return flags[country] || '🏁';
 }
 
 /* ================================================================
-   USER PROFILE (Firestore: users/{uid})
+   FIREBASE
    ================================================================ */
 async function loadUserProfile(user) {
   try {
@@ -1530,20 +863,10 @@ async function loadUserProfile(user) {
       applyTeam(favTeam);
       renderJokerPips();
       renderTeamGrid();
-      // Update profile stats display
       const el = document.getElementById('profile-pts');
       if (el) el.textContent = userProfile.totalPts || 0;
     } else {
-      // First time — create profile
-      userProfile = {
-        displayName: user.displayName || user.email.split('@')[0],
-        email: user.email,
-        favTeam: 'red-bull',
-        jokersLeft: 3,
-        totalPts: 0,
-        racesPlayed: 0,
-        createdAt: serverTimestamp()
-      };
+      userProfile = { displayName: user.displayName || user.email.split('@')[0], email: user.email, favTeam:'red-bull', jokersLeft:3, totalPts:0, createdAt:serverTimestamp() };
       await setDoc(ref, userProfile);
     }
   } catch(e) { console.error('loadUserProfile:', e); }
@@ -1551,15 +874,10 @@ async function loadUserProfile(user) {
 
 async function saveUserProfile(updates) {
   if (!currentUser) return;
-  try {
-    await updateDoc(doc(db, 'users', currentUser.uid), updates);
-    userProfile = {...userProfile, ...updates};
-  } catch(e) { console.error('saveUserProfile:', e); }
+  try { await updateDoc(doc(db,'users',currentUser.uid), updates); userProfile = {...userProfile,...updates}; }
+  catch(e) { console.error('saveUserProfile:', e); }
 }
 
-/* ================================================================
-   PICKS (Firestore: picks/{uid}_{raceId})
-   ================================================================ */
 async function loadUserPicks() {
   if (!currentUser) return;
   try {
@@ -1568,11 +886,12 @@ async function loadUserPicks() {
     if (snap.exists()) {
       const data = snap.data();
       picks       = data.picks      || picks;
-      top10Order  = data.top10Order || top10Order;
+      top10Order  = data.top10Order || [];
       jokerDriver = data.jokerDriver || '';
       isLocked    = data.locked     || false;
       restoreSelects();
       buildTop10List();
+      buildPoolList();
       if (isLocked) showLockedState();
       else showActiveState();
       updateProgress();
@@ -1581,84 +900,52 @@ async function loadUserPicks() {
 }
 
 async function savePicks() {
-  if (!currentUser) { localStorage.setItem('ctg-picks', JSON.stringify(picks)); return; }
+  if (!currentUser) return;
   try {
-    await setDoc(doc(db, 'picks', `${currentUser.uid}_${RACE_ID}`), {
-      uid: currentUser.uid,
-      raceId: RACE_ID,
-      season: SEASON,
-      picks,
-      top10Order,
-      jokerDriver,
-      locked: isLocked,
-      updatedAt: serverTimestamp()
+    await setDoc(doc(db,'picks',`${currentUser.uid}_${RACE_ID}`), {
+      uid:currentUser.uid, raceId:RACE_ID, season:SEASON,
+      picks, top10Order, jokerDriver, locked:isLocked, updatedAt:serverTimestamp()
     });
-  } catch(e) { console.error('savePicks:', e); toast('Save failed — check connection','error'); }
+  } catch(e) { toast('Save failed','error'); }
 }
 
-/* ================================================================
-   LEADERBOARD (Firestore: users ordered by totalPts)
-   ================================================================ */
 function loadLeaderboard() {
-  if (lbUnsub) lbUnsub(); // unsubscribe previous listener
+  if (lbUnsub) lbUnsub();
   try {
-    const q = query(collection(db, 'users'), orderBy('totalPts', 'desc'));
+    const q = query(collection(db,'users'), orderBy('totalPts','desc'));
     lbUnsub = onSnapshot(q, (snap) => {
       const players = [];
-      let myRank = null;
-      snap.forEach((d, i) => {
+      snap.forEach((d,i) => {
         const data = d.data();
         const isMe = currentUser && d.id === currentUser.uid;
-        if (isMe) myRank = players.length + 1;
-        players.push({
-          name: data.displayName || 'Player',
-          pts: data.totalPts || 0,
-          lastRace: data.lastRacePts || 0,
-          streak: data.streak || 0,
-          isMe,
-          uid: d.id
-        });
+        players.push({ name:data.displayName||'Player', pts:data.totalPts||0, lastRace:data.lastRacePts||0, isMe, uid:d.id });
       });
-      renderFirebaseLeaderboard(players);
-      // Update profile rank
+      const lb = document.getElementById('lb-global');
+      if (!players.length) { lb.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text3);font-size:14px">Be the first to pick! 🏁</div>'; return; }
+      lb.innerHTML = players.map((p,i) => {
+        const rClass = i===0?'r1':i===1?'r2':i===2?'r3':'rn';
+        const rLabel = i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1;
+        return `<div class="lb-row ${p.isMe?'is-me':''}">
+          <div class="lb-rank ${rClass}">${rLabel}</div>
+          <div><div class="lb-name ${p.isMe?'me-name':''}">${p.name}</div><div class="lb-meta">Last race: ${p.lastRace} pts</div></div>
+          <div class="lb-score">${p.pts}</div>
+          <div class="lb-delta eq">—</div>
+        </div>`;
+      }).join('');
+      const myRank = players.findIndex(p=>p.isMe) + 1;
       const rankEl = document.getElementById('profile-rank');
-      if (rankEl && myRank) rankEl.textContent = '#' + myRank;
+      if (rankEl && myRank > 0) rankEl.textContent = '#' + myRank;
     });
   } catch(e) { console.error('loadLeaderboard:', e); }
 }
 
-function renderFirebaseLeaderboard(players) {
-  const lb = document.getElementById('lb-global');
-  if (!players.length) {
-    lb.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text3);font-size:14px">No picks yet this season — be the first! 🏁</div>';
-    return;
-  }
-  lb.innerHTML = players.map((p, i) => {
-    const rClass = i===0?'r1':i===1?'r2':i===2?'r3':'rn';
-    const rLabel = i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1;
-    const streak = p.streak >= 3 ? ' 🔥' : p.streak >= 2 ? ' ✨' : '';
-    return `<div class="lb-row ${p.isMe?'is-me':''}">
-      <div class="lb-rank ${rClass}">${rLabel}</div>
-      <div>
-        <div class="lb-name ${p.isMe?'me-name':''}">${p.name}${streak}</div>
-        <div class="lb-meta">Last race: ${p.lastRace} pts</div>
-      </div>
-      <div class="lb-score">${p.pts}</div>
-      <div class="lb-delta eq">—</div>
-    </div>`;
-  }).join('');
-}
-
-/* ================================================================
-   GROUPS (Firestore: groups collection)
-   ================================================================ */
 async function loadUserGroups() {
   if (!currentUser) return;
   try {
-    const q = query(collection(db, 'groups'), where('members', 'array-contains', currentUser.uid));
+    const q = query(collection(db,'groups'), where('members','array-contains',currentUser.uid));
     const snap = await getDocs(q);
     groups = [];
-    snap.forEach(d => groups.push({id: d.id, ...d.data()}));
+    snap.forEach(d => groups.push({id:d.id,...d.data()}));
     renderGroups();
   } catch(e) { console.error('loadUserGroups:', e); }
 }
@@ -1669,20 +956,11 @@ async function doCreate() {
   if (!name) { toast('Enter a group name','error'); return; }
   try {
     const code = name.slice(0,3).toUpperCase() + Math.floor(Math.random()*900+100);
-    const ref = doc(collection(db, 'groups'));
-    await setDoc(ref, {
-      name,
-      code,
-      createdBy: currentUser.uid,
-      members: [currentUser.uid],
-      memberNames: [userProfile?.displayName || currentUser.email],
-      createdAt: serverTimestamp()
-    });
+    await setDoc(doc(collection(db,'groups')), { name, code, createdBy:currentUser.uid, members:[currentUser.uid], memberNames:[userProfile?.displayName||currentUser.email], createdAt:serverTimestamp() });
     toast(`✅ "${name}" created! Code: ${code}`, 'success');
     document.getElementById('grp-name').value = '';
-    toggleCreate();
-    loadUserGroups();
-  } catch(e) { console.error('doCreate:', e); toast('Failed to create group','error'); }
+    toggleCreate(); loadUserGroups();
+  } catch(e) { toast('Failed to create group','error'); }
 }
 
 async function doJoin() {
@@ -1690,21 +968,16 @@ async function doJoin() {
   const code = document.getElementById('join-code').value.trim().toUpperCase();
   if (!code) { toast('Enter an invite code','error'); return; }
   try {
-    const q = query(collection(db, 'groups'), where('code', '==', code));
+    const q = query(collection(db,'groups'), where('code','==',code));
     const snap = await getDocs(q);
-    if (snap.empty) { toast('Code not found — check and try again','error'); return; }
-    const groupDoc = snap.docs[0];
-    const data = groupDoc.data();
-    if (data.members.includes(currentUser.uid)) { toast('You\'re already in this group!','warn'); return; }
-    await updateDoc(doc(db, 'groups', groupDoc.id), {
-      members: [...data.members, currentUser.uid],
-      memberNames: [...(data.memberNames||[]), userProfile?.displayName || currentUser.email]
-    });
+    if (snap.empty) { toast('Code not found','error'); return; }
+    const gDoc = snap.docs[0]; const data = gDoc.data();
+    if (data.members.includes(currentUser.uid)) { toast('Already in this group!','warn'); return; }
+    await updateDoc(doc(db,'groups',gDoc.id), { members:[...data.members,currentUser.uid], memberNames:[...(data.memberNames||[]),userProfile?.displayName||currentUser.email] });
     toast(`✅ Joined "${data.name}"!`, 'success');
     document.getElementById('join-code').value = '';
-    toggleJoin();
-    loadUserGroups();
-  } catch(e) { console.error('doJoin:', e); toast('Failed to join group','error'); }
+    toggleJoin(); loadUserGroups();
+  } catch(e) { toast('Failed to join group','error'); }
 }
 
 /* ================================================================
@@ -1714,28 +987,23 @@ function applyTeam(teamId) {
   favTeam = teamId;
   document.body.setAttribute('data-team', teamId);
   localStorage.setItem('ctg-team', teamId);
-  document.querySelectorAll('.team-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.teamId === teamId);
-  });
+  document.querySelectorAll('.team-btn').forEach(b => b.classList.toggle('active', b.dataset.teamId === teamId));
 }
 
 function renderTeamGrid() {
-  const grid = document.getElementById('team-grid');
-  grid.innerHTML = TEAMS.map(t => `
-    <button class="team-btn ${t.id===favTeam?'active':''}" data-team-id="${t.id}" onclick="applyTeam('${t.id}')">
+  document.getElementById('team-grid').innerHTML = TEAMS.map(t =>
+    `<button class="team-btn ${t.id===favTeam?'active':''}" data-team-id="${t.id}" onclick="applyTeam('${t.id}')">
       <div class="team-swatch" style="background:${t.color}"></div>
-      ${t.name.split(' ')[0]}
+      <span style="font-size:9px">${t.name.split(' ')[0]}</span>
     </button>`).join('');
 }
 
 /* ================================================================
-   DRIVER SELECTS
+   DRIVER SELECTS (qualifying + joker dropdowns)
    ================================================================ */
 function populateSelects() {
-  const selIds = ['sel-pole','sel-q2','sel-q3','sel-fl','sel-dnf','sel-joker'];
-  selIds.forEach(id => {
+  ['sel-pole','sel-q2','sel-q3','sel-fl','sel-dnf','sel-joker'].forEach(id => {
     const sel = document.getElementById(id);
-    const firstOpt = sel.querySelector('option');
     DRIVERS.forEach(d => {
       const o = document.createElement('option');
       o.value = d.abbr;
@@ -1747,123 +1015,158 @@ function populateSelects() {
 
 function restoreSelects() {
   ['pole','q2','q3','fl','dnf'].forEach(k => {
-    const sel = document.getElementById('sel-'+k);
-    if (picks[k]) { sel.value = picks[k]; markCardDone('qc-'+k); }
+    const sel = document.getElementById('sel-' + k);
+    if (picks[k]) { sel.value = picks[k]; markCardDone('qc-' + k); }
   });
-  updateProgress();
+  if (jokerDriver) document.getElementById('sel-joker').value = jokerDriver;
 }
 
 function setPick(key, val) {
   picks[key] = val;
-  if (val) markCardDone('qc-'+key);
-  else document.getElementById('qc-'+key)?.classList.remove('done');
-  savePicks();
-  updateProgress();
+  if (val) markCardDone('qc-' + key);
+  else document.getElementById('qc-' + key)?.classList.remove('done');
+  savePicks(); updateProgress();
 }
 
-function markCardDone(id) {
-  document.getElementById(id)?.classList.add('done');
-}
+function markCardDone(id) { document.getElementById(id)?.classList.add('done'); }
 
 /* ================================================================
-   TOP 10 DRAG & DROP (mouse + touch)
+   TOP 10 — POOL + ORDERED LIST (all 22 drivers)
    ================================================================ */
+let poolFilter = '';
+
+function buildPoolList() {
+  const pool = document.getElementById('pool-list');
+  const search = poolFilter.toLowerCase();
+  pool.innerHTML = DRIVERS
+    .filter(d => !search || d.name.toLowerCase().includes(search) || d.team.toLowerCase().includes(search) || d.abbr.toLowerCase().includes(search))
+    .map(d => {
+      const inList = top10Order.includes(d.abbr);
+      return `<div class="pool-item ${inList?'in-list':''}" onclick="addToTop10('${d.abbr}')" title="${inList?'Already in your list':'Add to Top 10'}">
+        <div>
+          <div class="pool-item-name">${d.flag} ${d.name}</div>
+          <div class="pool-item-team">${d.team}</div>
+        </div>
+        <div class="pool-add">${inList?'✓':'+'}</div>
+      </div>`;
+    }).join('');
+}
+
+function filterPool(val) { poolFilter = val; buildPoolList(); }
+
+function addToTop10(abbr) {
+  if (top10Order.includes(abbr)) { toast('Already in your Top 10','warn'); return; }
+  if (top10Order.length >= 10) { toast('Top 10 is full — remove one first','warn'); return; }
+  top10Order.push(abbr);
+  buildTop10List();
+  buildPoolList();
+  updateTop10Count();
+  savePicks();
+}
+
+function removeFromTop10(abbr) {
+  top10Order = top10Order.filter(a => a !== abbr);
+  buildTop10List();
+  buildPoolList();
+  updateTop10Count();
+  savePicks();
+}
+
+function updateTop10Count() {
+  document.getElementById('top10-count').textContent = `${top10Order.length} / 10 picked`;
+}
+
 function buildTop10List() {
   const list = document.getElementById('drag-list');
-  list.innerHTML = '';
-  top10Order.forEach((abbr, i) => {
-    const d = DRIVERS.find(x=>x.abbr===abbr);
-    if (!d) return;
+  const empty = document.getElementById('drag-empty');
+
+  if (!top10Order.length) {
+    list.innerHTML = '<li class="top10-empty" id="drag-empty">← Add drivers from the pool</li>';
+    updateTop10Count();
+    return;
+  }
+
+  list.innerHTML = top10Order.map((abbr, i) => {
+    const d = DRIVERS.find(x => x.abbr === abbr);
+    if (!d) return '';
     const posClass = i===0?'p1':i===1?'p2':i===2?'p3':'';
     const isJoker = jokerDriver === abbr;
-    const li = document.createElement('li');
-    li.className = `drag-item${isJoker?' joker-active':''}`;
-    li.draggable = true;
-    li.dataset.abbr = abbr;
-    li.innerHTML = `
+    return `<li class="drag-item${isJoker?' joker-active':''}" draggable="true" data-abbr="${abbr}">
       <div class="drag-pos ${posClass}">P${i+1}</div>
       <div class="drag-handle">⠿</div>
       <div>
-        <div class="drag-driver-name">${d.flag} ${d.name} ${isJoker?'<span class="joker-crown">🃏</span>':''}</div>
+        <div class="drag-driver-name">${d.flag} ${d.name}${isJoker?' 🃏':''}</div>
         <div class="drag-driver-team">${d.team}</div>
       </div>
-      <div class="drag-abbr">${abbr}</div>`;
-    list.appendChild(li);
-  });
+      <button class="drag-remove" onclick="removeFromTop10('${abbr}')" title="Remove">✕</button>
+    </li>`;
+  }).join('');
+
+  updateTop10Count();
   attachDragHandlers();
 }
 
+/* ================================================================
+   DRAG & DROP
+   ================================================================ */
 let dragSrc = null;
 function attachDragHandlers() {
-  const items = document.querySelectorAll('.drag-item');
-  items.forEach(item => {
-    // Desktop drag
+  document.querySelectorAll('.drag-item').forEach(item => {
     item.addEventListener('dragstart', e => {
       dragSrc = item;
-      setTimeout(()=>item.classList.add('dragging'), 0);
+      setTimeout(() => item.classList.add('dragging'), 0);
       e.dataTransfer.effectAllowed = 'move';
     });
     item.addEventListener('dragend', () => {
       item.classList.remove('dragging');
-      document.querySelectorAll('.drag-item').forEach(i=>i.classList.remove('drag-over'));
+      document.querySelectorAll('.drag-item').forEach(i => i.classList.remove('drag-over'));
     });
     item.addEventListener('dragover', e => {
       e.preventDefault();
-      document.querySelectorAll('.drag-item').forEach(i=>i.classList.remove('drag-over'));
+      document.querySelectorAll('.drag-item').forEach(i => i.classList.remove('drag-over'));
       if (item !== dragSrc) item.classList.add('drag-over');
     });
     item.addEventListener('drop', e => {
       e.preventDefault();
       if (dragSrc && dragSrc !== item) {
         const list = document.getElementById('drag-list');
-        const allItems = [...list.querySelectorAll('.drag-item')];
-        const srcIdx = allItems.indexOf(dragSrc);
-        const tgtIdx = allItems.indexOf(item);
-        if (srcIdx < tgtIdx) list.insertBefore(dragSrc, item.nextSibling);
+        const all = [...list.querySelectorAll('.drag-item')];
+        const si = all.indexOf(dragSrc), ti = all.indexOf(item);
+        if (si < ti) list.insertBefore(dragSrc, item.nextSibling);
         else list.insertBefore(dragSrc, item);
         syncTop10Order();
       }
-      document.querySelectorAll('.drag-item').forEach(i=>i.classList.remove('drag-over'));
+      document.querySelectorAll('.drag-item').forEach(i => i.classList.remove('drag-over'));
     });
 
-    // Touch drag
-    let touchY = 0, touchItem = null;
-    item.addEventListener('touchstart', e => {
-      touchItem = item;
-      touchY = e.touches[0].clientY;
-      item.classList.add('dragging');
-    }, {passive:true});
+    // Touch
+    item.addEventListener('touchstart', e => { dragSrc = item; item.classList.add('dragging'); }, {passive:true});
     item.addEventListener('touchmove', e => {
       e.preventDefault();
-      const y = e.touches[0].clientY;
-      const list = document.getElementById('drag-list');
-      const allItems = [...list.querySelectorAll('.drag-item')];
-      allItems.forEach(i=>i.classList.remove('drag-over'));
-      const target = document.elementFromPoint(e.touches[0].clientX, y);
-      const targetItem = target?.closest('.drag-item');
-      if (targetItem && targetItem !== touchItem) targetItem.classList.add('drag-over');
+      const y = e.touches[0].clientY, x = e.touches[0].clientX;
+      document.querySelectorAll('.drag-item').forEach(i => i.classList.remove('drag-over'));
+      const t = document.elementFromPoint(x, y)?.closest('.drag-item');
+      if (t && t !== dragSrc) t.classList.add('drag-over');
     }, {passive:false});
     item.addEventListener('touchend', e => {
       item.classList.remove('dragging');
-      const list = document.getElementById('drag-list');
-      const allItems = [...list.querySelectorAll('.drag-item')];
-      const overItem = list.querySelector('.drag-item.drag-over');
-      if (overItem && overItem !== item) {
-        const srcIdx = allItems.indexOf(item);
-        const tgtIdx = allItems.indexOf(overItem);
-        if (srcIdx < tgtIdx) list.insertBefore(item, overItem.nextSibling);
-        else list.insertBefore(item, overItem);
+      const over = document.querySelector('.drag-item.drag-over');
+      if (over && over !== item) {
+        const list = document.getElementById('drag-list');
+        const all = [...list.querySelectorAll('.drag-item')];
+        const si = all.indexOf(item), ti = all.indexOf(over);
+        if (si < ti) list.insertBefore(item, over.nextSibling);
+        else list.insertBefore(item, over);
         syncTop10Order();
       }
-      allItems.forEach(i=>i.classList.remove('drag-over'));
+      document.querySelectorAll('.drag-item').forEach(i => i.classList.remove('drag-over'));
     });
   });
 }
 
 function syncTop10Order() {
-  top10Order = [...document.querySelectorAll('.drag-item')].map(i=>i.dataset.abbr);
-  buildTop10List();
-  savePicks();
+  top10Order = [...document.querySelectorAll('.drag-item')].map(i => i.dataset.abbr).filter(Boolean);
+  buildTop10List(); savePicks();
 }
 
 /* ================================================================
@@ -1871,20 +1174,19 @@ function syncTop10Order() {
    ================================================================ */
 function setJoker(abbr) {
   jokerDriver = abbr;
-  buildTop10List(); // update crown highlight
-  if (abbr) toast(`🃏 Joker on ${DRIVERS.find(d=>d.abbr===abbr)?.name || abbr}!`, 'warn');
+  buildTop10List();
+  if (abbr) toast(`🃏 Joker on ${DRIVERS.find(d=>d.abbr===abbr)?.name||abbr}!`, 'warn');
+  savePicks();
 }
 
 function renderJokerPips() {
   const el = document.getElementById('joker-pips');
-  if (!el) return;
-  el.innerHTML = Array.from({length:3}, (_,i) =>
-    `<div style="width:28px;height:6px;border-radius:3px;background:${i<jokersLeft?'var(--gold)':'var(--bg5)'}"></div>`
-  ).join('');
-  const disp = document.getElementById('joker-count-display');
-  if (disp) disp.textContent = jokersLeft;
-  const ud = document.getElementById('joker-uses-display');
-  if (ud) ud.textContent = `${jokersLeft} left`;
+  if (el) el.innerHTML = Array.from({length:3},(_,i)=>
+    `<div style="width:28px;height:6px;border-radius:3px;background:${i<jokersLeft?'var(--gold)':'var(--bg5)'}"></div>`).join('');
+  const d = document.getElementById('joker-count-display');
+  if (d) d.textContent = jokersLeft;
+  const u = document.getElementById('joker-uses-display');
+  if (u) u.textContent = `${jokersLeft} left`;
 }
 
 /* ================================================================
@@ -1892,9 +1194,9 @@ function renderJokerPips() {
    ================================================================ */
 const REQUIRED = ['pole','q2','q3','fl','dnf'];
 function updateProgress() {
-  const filled = REQUIRED.filter(k=>picks[k]).length;
-  const pct = (filled/REQUIRED.length)*100;
-  document.getElementById('progress-fill').style.width = pct+'%';
+  const filled = REQUIRED.filter(k => picks[k]).length;
+  const pct = (filled / REQUIRED.length) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
   document.getElementById('submit-progress-label').textContent =
     filled === REQUIRED.length ? 'All picks done — ready to lock!' : `${filled} of ${REQUIRED.length} required picks done`;
   document.getElementById('btn-lock').disabled = filled < REQUIRED.length;
@@ -1902,16 +1204,11 @@ function updateProgress() {
 
 function lockPicks() {
   if (!currentUser) { toast('Sign in to lock your picks!','error'); openAuth(); return; }
-  if (REQUIRED.some(k=>!picks[k])) return;
+  if (REQUIRED.some(k => !picks[k])) return;
   isLocked = true;
-  showLockedState();
-  renderLockedChips();
-  toast('🔒 Picks locked! Good luck out there.', 'success');
-  if (jokerDriver && jokersLeft > 0) {
-    jokersLeft--;
-    renderJokerPips();
-    saveUserProfile({ jokersLeft });
-  }
+  showLockedState(); renderLockedChips();
+  toast('🔒 Picks locked! Good luck out there.','success');
+  if (jokerDriver && jokersLeft > 0) { jokersLeft--; renderJokerPips(); saveUserProfile({jokersLeft}); }
   savePicks();
 }
 
@@ -1927,74 +1224,120 @@ function showActiveState() {
   document.getElementById('submit-bar').style.display = 'flex';
 }
 
-function editPicks() {
-  isLocked = false;
-  showActiveState();
-  savePicks();
-}
+function editPicks() { isLocked = false; showActiveState(); savePicks(); }
 
 function renderLockedChips() {
-  const labels = {pole:'Pole', q2:'Q2', q3:'Q3', fl:'Fastest Lap', dnf:'First DNF'};
-  const chips = document.getElementById('locked-chips-display');
   const getName = abbr => abbr==='NONE'?'No DNFs':DRIVERS.find(d=>d.abbr===abbr)?.name||abbr;
-  const t10 = top10Order.slice(0,3).map((a,i)=>`<div class="locked-chip"><div>${DRIVERS.find(d=>d.abbr===a)?.flag||''} ${getName(a)}</div><div class="lc-label">P${i+1}</div></div>`).join('');
-  const others = Object.entries(picks).map(([k,v])=>v?`<div class="locked-chip"><div>${getName(v)}</div><div class="lc-label">${labels[k]||k}</div></div>`:'').join('');
-  const jokerChip = jokerDriver?`<div class="locked-chip" style="border-color:var(--gold);background:rgba(245,197,24,.1)"><div>🃏 ${getName(jokerDriver)}</div><div class="lc-label">Joker</div></div>`:'';
-  chips.innerHTML = t10 + others + jokerChip;
+  const labels = {pole:'Pole',q2:'Q2',q3:'Q3',fl:'Fastest Lap',dnf:'First DNF'};
+  const t10 = top10Order.slice(0,3).map((a,i)=>
+    `<div class="locked-chip"><div>${DRIVERS.find(d=>d.abbr===a)?.flag||''} ${getName(a)}</div><div class="lc-label">P${i+1}</div></div>`).join('');
+  const others = Object.entries(picks).map(([k,v])=>v?
+    `<div class="locked-chip"><div>${getName(v)}</div><div class="lc-label">${labels[k]}</div></div>`:'').join('');
+  const joker = jokerDriver?`<div class="locked-chip" style="border-color:var(--gold);background:rgba(245,197,24,.1)"><div>🃏 ${getName(jokerDriver)}</div><div class="lc-label">Joker</div></div>`:'';
+  document.getElementById('locked-chips-display').innerHTML = t10 + others + joker;
 }
 
 /* ================================================================
-   LEADERBOARD — placeholder until Firebase loads
+   COUNTDOWN
    ================================================================ */
-function renderLeaderboard() {
-  const lb = document.getElementById('lb-global');
-  lb.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text3);font-size:14px">Sign in to see live standings 🏁</div>';
-  const lr = document.getElementById('lb-last-race');
-  const posIcon = p => p===1?'🥇':p===2?'🥈':p===3?'🥉':p;
-  lr.innerHTML = LAST_RACE.map(r=>`<div class="lb-row">
-    <div class="lb-rank">${posIcon(r.pos)}</div>
-    <div><div class="lb-name">${r.driver}</div><div class="lb-meta">${r.team}</div></div>
-    <div class="lb-score">${r.pts}</div>
-    <div></div>
-  </div>`).join('');
+let countdownInterval = null;
+function startCountdown(targetDate) {
+  if (countdownInterval) clearInterval(countdownInterval);
+  if (!targetDate) return;
+  function tick() {
+    const diff = targetDate - Date.now();
+    if (diff <= 0) { ['cd-d','cd-h','cd-m','cd-s'].forEach(id=>document.getElementById(id).textContent='00'); return; }
+    const d=Math.floor(diff/86400000), h=Math.floor(diff%86400000/3600000),
+          m=Math.floor(diff%3600000/60000), s=Math.floor(diff%60000/1000);
+    document.getElementById('cd-d').textContent=String(d).padStart(2,'0');
+    document.getElementById('cd-h').textContent=String(h).padStart(2,'0');
+    document.getElementById('cd-m').textContent=String(m).padStart(2,'0');
+    document.getElementById('cd-s').textContent=String(s).padStart(2,'0');
+  }
+  tick(); countdownInterval = setInterval(tick, 1000);
 }
 
 /* ================================================================
-   SCHEDULE
+   NAVIGATION
    ================================================================ */
-function renderSchedule() {
-  document.getElementById('sched-list').innerHTML = SCHEDULE.map(r=>{
-    const badge = r.status==='done'
-      ? `<span class="sec-badge sb-green">✓ Done</span>`
-      : r.status==='next'
-      ? `<span class="sec-badge sb-accent">▶ Next</span>`
-      : '';
-    return `<div class="sched-row sched-${r.status}">
-      <div class="sched-round">${r.r}</div>
-      <div>
-        <div class="sched-name">${r.flag} ${r.name}</div>
-        <div class="sched-circuit">${r.circuit}</div>
-      </div>
-      <div>
-        <div class="sched-date">${r.date}</div>
-        <div class="sched-status">${badge}</div>
-      </div>
-    </div>`;
-  }).join('');
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-link,.bnav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-link,.bnav-btn').forEach(b => {
+    if (b.getAttribute('onclick')?.includes("'" + id + "'")) b.classList.add('active');
+  });
+  if (id === 'leaderboard') { fetchDriverStandings(); fetchConstructorStandings(); }
+  if (id === 'groups' || id === 'profile') checkGroupsAuth();
+  window.scrollTo(0, 0);
 }
 
 /* ================================================================
-   GROUPS
+   AUTH
    ================================================================ */
+let authMode = 'in';
+function openAuth() { document.getElementById('overlay-auth').classList.remove('hidden'); }
+function closeAuth() { document.getElementById('overlay-auth').classList.add('hidden'); }
+function switchAuthTab(mode) {
+  authMode = mode;
+  document.getElementById('auth-tab-in').classList.toggle('active', mode==='in');
+  document.getElementById('auth-tab-up').classList.toggle('active', mode==='up');
+  document.getElementById('auth-name-group').style.display = mode==='up'?'flex':'none';
+}
+
+async function doAuth() {
+  const email = document.getElementById('auth-email').value.trim();
+  const pass = document.getElementById('auth-pass').value;
+  if (!email || !pass) { toast('Enter email and password','error'); return; }
+  const btn = document.querySelector('#overlay-auth .btn-full');
+  btn.textContent = 'Signing in…'; btn.disabled = true;
+  try {
+    if (authMode === 'up') {
+      const displayName = document.getElementById('auth-name').value.trim() || email.split('@')[0];
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      await updateProfile(cred.user, {displayName});
+    } else {
+      await signInWithEmailAndPassword(auth, email, pass);
+    }
+    closeAuth();
+  } catch(e) {
+    const msgs = {'auth/email-already-in-use':'Email already has an account','auth/wrong-password':'Wrong password','auth/user-not-found':'No account with that email','auth/weak-password':'Password must be 6+ characters','auth/invalid-email':'Check your email','auth/invalid-credential':'Wrong email or password'};
+    toast(msgs[e.code] || 'Sign in failed', 'error');
+  } finally { btn.textContent = 'Continue →'; btn.disabled = false; }
+}
+
+async function doGoogleSignIn() {
+  try { await signInWithPopup(auth, googleProvider); closeAuth(); }
+  catch(e) { if (e.code !== 'auth/popup-closed-by-user') toast('Google sign-in failed','error'); }
+}
+
+function updateAuthUI() {
+  const name = currentUser?.displayName || currentUser?.email?.split('@')[0] || '';
+  document.getElementById('nav-username').textContent = name;
+  document.getElementById('nav-auth-btn').textContent = currentUser ? '⚙️' : 'Sign In';
+  document.getElementById('nav-auth-btn').onclick = currentUser ? () => showPage('profile') : openAuth;
+}
+
+async function signOut() {
+  if (lbUnsub) { lbUnsub(); lbUnsub = null; }
+  await fbSignOut(auth);
+  toast('Signed out','success');
+  showPage('picks');
+}
+
+function checkGroupsAuth() {
+  document.getElementById('groups-guest').style.display = currentUser?'none':'block';
+  document.getElementById('groups-member').style.display = currentUser?'block':'none';
+  document.getElementById('profile-guest').style.display = currentUser?'none':'block';
+  document.getElementById('profile-member').style.display = currentUser?'block':'none';
+}
+
 function renderGroups() {
   const grid = document.getElementById('groups-grid');
-  if (!groups.length) {
-    grid.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text3);font-size:14px;grid-column:1/-1">No groups yet — create one or ask a friend for their invite code!</div>';
-    return;
-  }
+  if (!groups.length) { grid.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text3);font-size:14px;grid-column:1/-1">No groups yet — create one or get an invite code!</div>'; return; }
   grid.innerHTML = groups.map(g=>`
     <div class="group-card">
-      <div class="group-code-pill" onclick="copyCode('${g.code}',event)" title="Copy invite code">${g.code}</div>
+      <div class="group-code-pill" onclick="copyCode('${g.code}',event)">${g.code}</div>
       <div class="group-card-name">${g.name}</div>
       <div class="group-card-count">${(g.members||[]).length} members</div>
       <div class="group-card-rank">#—</div>
@@ -2003,168 +1346,33 @@ function renderGroups() {
 }
 
 function toggleCreate() {
+  document.getElementById('join-panel').style.display='none';
   const p = document.getElementById('create-panel');
-  const j = document.getElementById('join-panel');
-  j.style.display='none';
   p.style.display = p.style.display==='none'?'block':'none';
 }
 function toggleJoin() {
+  document.getElementById('create-panel').style.display='none';
   const p = document.getElementById('join-panel');
-  const c = document.getElementById('create-panel');
-  c.style.display='none';
   p.style.display = p.style.display==='none'?'block':'none';
 }
 function copyCode(code, e) {
   e?.stopPropagation();
   navigator.clipboard?.writeText(code).catch(()=>{});
-  toast(`📋 Code "${code}" copied!`, 'success');
+  toast(`📋 Code "${code}" copied!`,'success');
 }
-function checkGroupsAuth() {
-  document.getElementById('groups-guest').style.display = currentUser?'none':'block';
-  document.getElementById('groups-member').style.display = currentUser?'block':'none';
-  document.getElementById('profile-guest').style.display = currentUser?'none':'block';
-  document.getElementById('profile-member').style.display = currentUser?'block':'none';
-}
-
-/* ================================================================
-   COUNTDOWN
-   ================================================================ */
-function startCountdown() {
-  const target = new Date('2025-05-24T13:00:00Z');
-  function tick() {
-    const diff = target - Date.now();
-    if (diff <= 0) {
-      ['cd-d','cd-h','cd-m','cd-s'].forEach(id=>document.getElementById(id).textContent='00');
-      return;
-    }
-    const d=Math.floor(diff/86400000),
-          h=Math.floor(diff%86400000/3600000),
-          m=Math.floor(diff%3600000/60000),
-          s=Math.floor(diff%60000/1000);
-    document.getElementById('cd-d').textContent=String(d).padStart(2,'0');
-    document.getElementById('cd-h').textContent=String(h).padStart(2,'0');
-    document.getElementById('cd-m').textContent=String(m).padStart(2,'0');
-    document.getElementById('cd-s').textContent=String(s).padStart(2,'0');
-  }
-  tick(); setInterval(tick,1000);
-}
-
-/* ================================================================
-   NAVIGATION
-   ================================================================ */
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-link').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  document.querySelectorAll('.nav-link, .bnav-btn').forEach(b=>{
-    if (b.getAttribute('onclick')?.includes("'"+id+"'")) b.classList.add('active');
-  });
-  if (id==='groups' || id==='profile') checkGroupsAuth();
-  window.scrollTo(0,0);
-}
-
-/* ================================================================
-   AUTH — Firebase
-   ================================================================ */
-let authMode = 'in';
-function openAuth() { document.getElementById('overlay-auth').classList.remove('hidden'); }
-function closeAuth() { document.getElementById('overlay-auth').classList.add('hidden'); }
-function switchAuthTab(mode) {
-  authMode = mode;
-  document.getElementById('auth-tab-in').classList.toggle('active',mode==='in');
-  document.getElementById('auth-tab-up').classList.toggle('active',mode==='up');
-  document.getElementById('auth-name-group').style.display=mode==='up'?'flex':'none';
-}
-
-async function doAuth() {
-  const email = document.getElementById('auth-email').value.trim();
-  const pass  = document.getElementById('auth-pass').value;
-  if (!email || !pass) { toast('Enter your email and password','error'); return; }
-  const btn = document.querySelector('#overlay-auth .btn-full');
-  btn.textContent = 'Signing in…'; btn.disabled = true;
-  try {
-    if (authMode === 'up') {
-      const rawName = document.getElementById('auth-name').value.trim();
-      const displayName = rawName || email.split('@')[0];
-      const cred = await createUserWithEmailAndPassword(auth, email, pass);
-      await updateProfile(cred.user, { displayName });
-    } else {
-      await signInWithEmailAndPassword(auth, email, pass);
-    }
-    closeAuth();
-    // onAuthStateChanged fires automatically and handles everything
-  } catch(e) {
-    const msgs = {
-      'auth/email-already-in-use': 'That email already has an account — sign in instead',
-      'auth/wrong-password': 'Wrong password — try again',
-      'auth/user-not-found': 'No account with that email — sign up instead',
-      'auth/weak-password': 'Password must be at least 6 characters',
-      'auth/invalid-email': 'Check your email address',
-      'auth/invalid-credential': 'Wrong email or password'
-    };
-    toast(msgs[e.code] || 'Sign in failed — try again', 'error');
-  } finally {
-    btn.textContent = 'Continue →'; btn.disabled = false;
-  }
-}
-
-async function doGoogleSignIn() {
-  try {
-    await signInWithPopup(auth, googleProvider);
-    closeAuth();
-  } catch(e) {
-    if (e.code !== 'auth/popup-closed-by-user') toast('Google sign-in failed','error');
-  }
-}
-
-function updateAuthUI() {
-  const name = currentUser?.displayName || currentUser?.email?.split('@')[0] || '';
-  document.getElementById('nav-username').textContent = name;
-  document.getElementById('nav-auth-btn').textContent = currentUser ? '⚙️' : 'Sign In';
-  document.getElementById('nav-auth-btn').onclick = currentUser ? ()=>showPage('profile') : openAuth;
-  // Update profile display name
-  const dnEl = document.getElementById('profile-displayname');
-  if (dnEl) dnEl.textContent = name;
-}
-
-async function signOut() {
-  try {
-    if (lbUnsub) { lbUnsub(); lbUnsub = null; }
-    await fbSignOut(auth);
-    toast('Signed out','success');
-    showPage('picks');
-  } catch(e) { toast('Sign out failed','error'); }
-}
-
 function saveTz(val) { localStorage.setItem('ctg-tz', val); toast('Timezone saved ✓','success'); }
 
-/* Team change saves to profile */
-function applyTeamAndSave(teamId) {
-  applyTeam(teamId);
-  if (currentUser) saveUserProfile({ favTeam: teamId });
-}
-
-/* Close modal on overlay click */
-document.getElementById('overlay-auth').addEventListener('click', e => {
-  if (e.target===document.getElementById('overlay-auth')) closeAuth();
-});
-
 /* ================================================================
-   TOAST
+   TOAST & FAQ
    ================================================================ */
 let toastTimer;
 function toast(msg, type='success') {
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = `toast ${type} show`;
+  el.textContent = msg; el.className = `toast ${type} show`;
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>el.classList.remove('show'), 3000);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
 }
 
-/* ================================================================
-   FAQ ACCORDION
-   ================================================================ */
 function toggleFaq(btn) {
   const item = btn.closest('.faq-item');
   const isOpen = item.classList.contains('open');
@@ -2173,18 +1381,54 @@ function toggleFaq(btn) {
 }
 
 /* ================================================================
-   KICK IT OFF
+   INIT
    ================================================================ */
+function init() {
+  applyTeam(favTeam);
+  populateSelects();
+  buildPoolList();
+  buildTop10List();
+  renderTeamGrid();
+  renderJokerPips();
+  updateProgress();
+
+  // Fetch live API data
+  fetchNextRace();
+
+  // Firebase auth
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      currentUser = user;
+      await loadUserProfile(user);
+      await loadUserPicks();
+      loadLeaderboard();
+      loadUserGroups();
+    } else {
+      currentUser = null; userProfile = null;
+      picks = {pole:'',q2:'',q3:'',fl:'',dnf:''};
+      top10Order = []; jokerDriver = ''; jokersLeft = 3; isLocked = false;
+      buildTop10List(); buildPoolList();
+      renderGroups();
+      document.getElementById('lb-global').innerHTML = '<div style="padding:32px;text-align:center;color:var(--text3);font-size:14px">Sign in to see live standings 🏁</div>';
+    }
+    updateAuthUI(); checkGroupsAuth();
+  });
+}
+
+document.getElementById('overlay-auth').addEventListener('click', e => {
+  if (e.target === document.getElementById('overlay-auth')) closeAuth();
+});
+
 init();
 
-/* Expose functions to global scope for onclick handlers */
 window.showPage=showPage; window.openAuth=openAuth; window.closeAuth=closeAuth;
 window.switchAuthTab=switchAuthTab; window.doAuth=doAuth; window.doGoogleSignIn=doGoogleSignIn;
 window.signOut=signOut; window.setPick=setPick; window.lockPicks=lockPicks;
-window.editPicks=editPicks; window.setJoker=setJoker; window.applyTeam=applyTeamAndSave;
+window.editPicks=editPicks; window.setJoker=setJoker; window.applyTeam=applyTeam;
 window.toggleCreate=toggleCreate; window.toggleJoin=toggleJoin;
 window.doCreate=doCreate; window.doJoin=doJoin; window.copyCode=copyCode;
 window.saveTz=saveTz; window.toggleFaq=toggleFaq;
+window.addToTop10=addToTop10; window.removeFromTop10=removeFromTop10; window.filterPool=filterPool;
 </script>
 </body>
 </html>
